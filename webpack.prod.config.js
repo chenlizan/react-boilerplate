@@ -18,6 +18,7 @@ const clientConfig = {
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].js',
+        chunkFilename:'[name].[hash].js',
         publicPath: '/'
     },
     module: {
@@ -75,6 +76,21 @@ const clientConfig = {
             template: 'public/index.html'
         }),
         new ExtractTextPlugin("styles.css"),
+        new webpack.optimize.UglifyJsPlugin({
+            uglifyOptions: {
+                ie8: true,
+                ecma: 8,
+                compress: {
+                    warnings: false,
+                    comparisons: false
+                },
+                output: {
+                    ascii_only: true,
+                    comments: false
+                },
+                warnings: false
+            }
+        }),
         new ProgressBarPlugin()
     ],
     node: {
