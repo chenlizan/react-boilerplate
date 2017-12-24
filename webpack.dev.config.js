@@ -22,7 +22,8 @@ const clientConfig = {
         'babel-polyfill'
     ],
     output: {
-        filename: 'client.js',
+        chunkFilename: '[name].[hash].js',
+        filename: '[name].js',
         publicPath: '/'
     },
     module: {

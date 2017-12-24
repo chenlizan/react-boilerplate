@@ -17,8 +17,8 @@ const clientConfig = {
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: '[name].js',
         chunkFilename: '[name].[hash].js',
+        filename: '[name].js',
         publicPath: '/'
     },
     module: {
