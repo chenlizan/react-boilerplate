@@ -44,7 +44,7 @@ const clientConfig = {
                     loader: 'babel-loader',
                     options: {
                         presets: ['es2015', 'react', 'stage-0'],
-                        plugins: ['add-module-exports','transform-object-assign',
+                        plugins: ['add-module-exports', 'transform-object-assign',
                             ['import', {
                                 'libraryName': 'antd',
                                 'style': 'css'

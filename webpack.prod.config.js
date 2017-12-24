@@ -18,7 +18,7 @@ const clientConfig = {
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].js',
-        chunkFilename:'[name].[hash].js',
+        chunkFilename: '[name].[hash].js',
         publicPath: '/'
     },
     module: {
@@ -40,7 +40,7 @@ const clientConfig = {
                     loader: 'babel-loader',
                     options: {
                         presets: ['es2015', 'react', 'stage-0'],
-                        plugins: ['add-module-exports','transform-object-assign',
+                        plugins: ['add-module-exports', 'transform-object-assign',
                             ['import', {
                                 'libraryName': 'antd',
                                 'style': 'css'
