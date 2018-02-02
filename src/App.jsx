@@ -8,6 +8,7 @@ class App extends Component {
     render() {
         return (
             <div>
+                <div>外壳</div>
                 {this.props.children}
             </div>
         );
