@@ -6,8 +6,7 @@
   "scripts": {
     "inst": "npm install",
     "dev": "cross-env NODE_ENV=development webpack-dev-server --config webpack.dev.config",
-    "prod": "cross-env NODE_ENV=production webpack --config webpack.prod.config",
-    "serve": "serve -port=3000 dist"
+    "prod": "cross-env NODE_ENV=production webpack --config webpack.prod.config"
   },
   "author": "chenlizan",
   "license": "MIT",
@@ -44,6 +43,5 @@
     "webpack-dev-server": "^2.9.7"
   },
   "dependencies": {
-    "serve": "^6.0.6"
   }
 }
