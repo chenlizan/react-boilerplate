@@ -3,8 +3,6 @@
  */
 
 import {applyMiddleware, createStore, combineReducers, compose} from 'redux';
-import {persistStore, autoRehydrate} from 'redux-persist'
-import thunk from 'redux-thunk';
 import Login from '../reducers/Login';
 
 const initState = {
@@ -19,10 +17,6 @@ export const configureStore = (preloadState) => {
     const store = createStore(
         combineReducers(reducers),
         preloadState || initState,
-        compose(applyMiddleware(thunk),
-            autoRehydrate()
-        )
     );
-    persistStore(store);
     return store
 };

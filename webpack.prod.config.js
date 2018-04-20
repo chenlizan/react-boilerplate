@@ -51,9 +51,30 @@ const clientConfig = {
             },
             {
                 test: /\.css$/,
+                exclude: /node_modules/,
                 use: ExtractTextPlugin.extract({
-                    fallback: "style-loader",
-                    use: "css-loader"
+                    fallback: 'style-loader',
+                    use: [{
+                        loader: 'css-loader',
+                        options: {
+                            minimize: true,
+                            modules: true,
+                            localIdentName: '[path][name]__[local]--[hash:base64:5]'
+                        }
+                    }]
+                })
+            },
+            {
+                test: /\.css$/,
+                include: /node_modules/,
+                use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: [{
+                        loader: 'css-loader',
+                        options: {
+                            minimize: true
+                        }
+                    }]
                 })
             }
         ]
@@ -69,7 +90,6 @@ const clientConfig = {
             }
         }),
         new webpack.optimize.OccurrenceOrderPlugin(),
-        new webpack.optimize.DedupePlugin(),
         new webpack.optimize.CommonsChunkPlugin({
             name: "vendor",
             minChunks: Infinity,
