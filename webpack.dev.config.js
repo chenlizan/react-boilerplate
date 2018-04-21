@@ -19,7 +19,6 @@ const clientConfig = {
     devtool: 'eval-source-map',
     entry: [
         path.resolve(__dirname, 'src/index'),
-        'babel-polyfill'
     ],
     output: {
         chunkFilename: '[name].[hash].js',
@@ -45,7 +44,7 @@ const clientConfig = {
                     loader: 'babel-loader',
                     options: {
                         presets: ['es2015', 'react', 'stage-0'],
-                        plugins: ['add-module-exports', 'transform-object-assign',
+                        plugins: [
                             ['import', {
                                 'libraryName': 'antd',
                                 'style': 'css'
@@ -93,7 +92,6 @@ const clientConfig = {
             template: 'public/index.html'
         }),
         new ProgressBarPlugin()
-
     ],
     node: {
         dgram: 'empty',

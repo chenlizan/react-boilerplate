@@ -1,1 +1,9 @@
-# 前端脚手架
+# react-boilerplate
+
+```
+npm run inst
+
+npm run dev
+
+npm run prod
+```
