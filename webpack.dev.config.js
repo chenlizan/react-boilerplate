@@ -18,6 +18,7 @@ const clientConfig = {
     },
     devtool: 'eval-source-map',
     entry: [
+        'babel-polyfill',
         path.resolve(__dirname, 'src/index'),
     ],
     output: {
