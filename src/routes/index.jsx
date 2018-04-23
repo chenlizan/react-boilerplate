@@ -4,9 +4,17 @@
 
 import React from 'react';
 import {HashRouter, Route, Switch} from 'react-router-dom';
+import Loadable from 'react-loadable';
 
-import App from '../App';
-import Login from '../containers/Login';
+const App = Loadable({
+    loader: () => import('../App'),
+    loading: () => null
+});
+
+const Login = Loadable({
+    loader: () => import('../containers/Login'),
+    loading: () => null
+});
 
 export const routes = (
     <HashRouter>

@@ -1,9 +1,8 @@
 # react-boilerplate
 
-```
-npm run inst
+## Getting Started
 
-npm run dev
-
-npm run prod
-```
+- Require Node.js v6 or later.
+- `npm run inst` to install dependencies and devDependencies.
+- `npm run dev` to start up the development environment.
+- `npm run prod` to compile and bundle the client files.

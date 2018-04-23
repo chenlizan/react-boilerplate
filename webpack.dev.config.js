@@ -22,7 +22,7 @@ const clientConfig = {
         path.resolve(__dirname, 'src/index'),
     ],
     output: {
-        chunkFilename: '[name].[hash].js',
+        chunkFilename: 'chunk.[chunkhash:5].js',
         filename: '[name].js',
         publicPath: '/'
     },
@@ -44,12 +44,12 @@ const clientConfig = {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: ['es2015', 'react', 'stage-0'],
+                        presets: ['env', 'es2015', 'react', 'stage-0'],
                         plugins: [
-                            ['import', {
-                                'libraryName': 'antd',
-                                'style': 'css'
-                            }]
+                            ['import', [
+                                {'libraryName': 'antd', 'style': 'css'},
+                                {'libraryName': 'antd-mobile', 'style': 'css'}
+                            ]],
                         ]
                     }
                 }
@@ -84,11 +84,11 @@ const clientConfig = {
     plugins: [
         new webpack.DefinePlugin({
             "process.env": {
-                NODE_ENV: JSON.stringify("development")
+                NODE_ENV: JSON.stringify('development')
             }
         }),
         new webpack.HotModuleReplacementPlugin(),
-        new ExtractTextPlugin("style.css"),
+        new ExtractTextPlugin('[name].[contenthash:5].css'),
         new HtmlWebpackPlugin({
             template: 'public/index.html'
         }),

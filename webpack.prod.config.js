@@ -13,11 +13,11 @@ const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const clientConfig = {
     entry: {
         client: path.resolve(__dirname, 'src/index'),
-        vendor: ['react', 'react-dom', 'react-redux', 'react-router', 'redux']
+        vendor: ['react', 'react-dom', 'react-redux', 'react-router', 'redux', 'redux-actions']
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
-        chunkFilename: '[name].[hash].js',
+        chunkFilename: 'chunk.[chunkhash:5].js',
         filename: '[name].js',
         publicPath: './'
     },
@@ -39,12 +39,12 @@ const clientConfig = {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: ['es2015', 'react', 'stage-0'],
+                        presets: ['env', 'es2015', 'react', 'stage-0'],
                         plugins: [
-                            ['import', {
-                                'libraryName': 'antd',
-                                'style': 'css'
-                            }]
+                            ['import', [
+                                {'libraryName': 'antd', 'style': 'css'},
+                                {'libraryName': 'antd-mobile', 'style': 'css'}
+                            ]],
                         ]
                     }
                 }
@@ -86,7 +86,7 @@ const clientConfig = {
 
         new webpack.DefinePlugin({
             "process.env": {
-                NODE_ENV: JSON.stringify("production")
+                NODE_ENV: JSON.stringify('production')
             }
         }),
         new webpack.optimize.OccurrenceOrderPlugin(),
@@ -98,7 +98,7 @@ const clientConfig = {
             filename: 'index.html',
             template: 'public/index.html'
         }),
-        new ExtractTextPlugin("styles.css"),
+        new ExtractTextPlugin('[name].[contenthash:5].css'),
         new webpack.optimize.UglifyJsPlugin({
             uglifyOptions: {
                 ie8: true,
