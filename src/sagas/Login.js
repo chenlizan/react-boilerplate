@@ -9,7 +9,7 @@ import {createAction} from 'redux-actions';
 function* loginProcess(action) {
     try {
         yield delay(2000);
-        yield put(createAction('ACCEPT_LOGIN_INFO')('Login successful\n'));
+        yield put(createAction('ACCEPT_LOGIN_INFO')('Login successful'));
     } catch (e) {
         yield put(createAction('USER_FETCH_FAILED')(e.message));
     }
