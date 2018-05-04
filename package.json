@@ -1,8 +1,7 @@
 {
   "name": "react-boilerplate",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "React Boilerplate",
-  "main": "main.js",
   "scripts": {
     "inst": "npm install",
     "dev": "cross-env NODE_ENV=development webpack-dev-server --config webpack.dev.config",
@@ -26,20 +25,20 @@
     "file-loader": "^1.1.11",
     "html-webpack-plugin": "^3.2.0",
     "immutable": "^3.8.1",
+    "open-browser-webpack-plugin": "0.0.5",
     "progress-bar-webpack-plugin": "^1.10.0",
     "prop-types": "^15.5.10",
     "react": "^16.2.0",
     "react-dev-utils": "^5.0.0",
     "react-dom": "^16.2.0",
+    "react-loadable": "^5.4.0",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
     "redux": "^4.0.0",
+    "redux-actions": "^2.3.2",
     "style-loader": "^0.21.0",
     "webpack": "^3.x.x",
     "webpack-dev-server": "^2.x.x"
   },
-  "dependencies": {
-    "react-loadable": "^5.3.1",
-    "redux-actions": "^2.3.0"
-  }
+  "dependencies": {}
 }

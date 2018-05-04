@@ -8,12 +8,14 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const OpenBrowserPlugin = require('open-browser-webpack-plugin');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
+
+const PORT = 3000;
 
 const clientConfig = {
     devServer: {
-        open: true,
-        port: 3000,
+        port: PORT,
         historyApiFallback: true
     },
     devtool: 'eval-source-map',
@@ -92,6 +94,7 @@ const clientConfig = {
         new HtmlWebpackPlugin({
             template: 'public/index.html'
         }),
+        new OpenBrowserPlugin({url: `http://localhost:${PORT}`, browser: 'chrome'}),
         new ProgressBarPlugin()
     ],
     node: {
