@@ -1,6 +1,6 @@
 {
   "name": "react-boilerplate",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "React Boilerplate",
   "scripts": {
     "inst": "npm install",
@@ -36,6 +36,7 @@
     "react-router-dom": "^4.2.2",
     "redux": "^4.0.0",
     "redux-actions": "^2.3.2",
+    "redux-saga": "^0.16.0",
     "style-loader": "^0.21.0",
     "webpack": "^3.x.x",
     "webpack-dev-server": "^2.x.x"
