@@ -4,17 +4,18 @@
 
 import {delay} from 'redux-saga';
 import {call, put, takeEvery} from 'redux-saga/effects';
-import {accept_login_info_creator, fetch_failed_info_creator} from '../action'
+import {login_succeeded_creator, login_failed_creator} from '../action'
 
 function* loginProcess(action) {
     try {
         yield delay(2000);
-        yield put(accept_login_info_creator('Login successful'));
+        yield put(login_succeeded_creator('Login successful'));
+        yield put(login_succeeded_creator(null));
     } catch (e) {
-        yield put(fetch_failed_info_creator(e.message));
+        yield put(login_failed_creator(e.message));
     }
 }
 
-export function* login() {
-    yield takeEvery('SAVE_LOGIN_INFO', loginProcess);
+export function* loginSaga() {
+    yield takeEvery('LOGIN_REQUESTED', loginProcess);
 }

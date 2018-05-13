@@ -6,14 +6,17 @@ import {handleActions} from "redux-actions"
 
 const initState = {
     account: {},
-    result: ''
+    result: null
 };
 
 const reducer = handleActions({
-    SAVE_LOGIN_INFO: (state, action) => ({
+    LOGIN_REQUESTED: (state, action) => ({
         ...state, account: action.payload
     }),
-    ACCEPT_LOGIN_INFO: (state, action) => ({
+    LOGIN_SUCCEEDED: (state, action) => ({
+        ...state, result: action.payload
+    }),
+    LOGIN_FAILED: (state, action) => ({
         ...state, result: action.payload
     }),
 }, initState);

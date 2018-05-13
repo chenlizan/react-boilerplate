@@ -20,6 +20,7 @@ export const routes = (
     <HashRouter>
         <App>
             <Switch>
+                <Route path="/" exact component={Login} />
                 <Route path="/login" component={Login}/>
             </Switch>
         </App>

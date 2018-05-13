@@ -5,17 +5,18 @@
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import Login from '../components/Login';
-import {save_login_info_creator} from '../action/index';
+import {login_requested_creator} from '../action/index';
 
 function mapStateToProps(state) {
     return {
-        account: state.Login.account
-    };
+        account: state.Login.account,
+        result: state.Login.result
+    }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        handleSaveLoginInfo: bindActionCreators(save_login_info_creator, dispatch)
+        handleLoginRequested: bindActionCreators(login_requested_creator, dispatch)
     };
 }
 

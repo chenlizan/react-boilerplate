@@ -3,25 +3,36 @@
  */
 
 import React from 'react';
-import {Form, Icon, Input, Button, Checkbox} from 'antd';
+import {Button, Checkbox, Form, Icon, Input, message} from 'antd';
 
 const FormItem = Form.Item;
 
 import styles from '../stylesheets/Login.css'
 
 class LoginForm extends React.Component {
+
+    componentDidUpdate() {
+        const {result} = this.props;
+        result ? this.info(result) : '';
+    }
+
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                this.props.handleSaveLoginInfo(values);
+                this.props.handleLoginRequested(values);
                 console.log('Received values of form: ', values);
             }
         });
-    }
+    };
+
+    info = (msg) => {
+        message.info(msg);
+    };
 
     render() {
         const {getFieldDecorator} = this.props.form;
+
         return (
             <Form onSubmit={this.handleSubmit} className={styles["login-form"]}>
                 <FormItem>
