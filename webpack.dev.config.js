@@ -92,6 +92,7 @@ const clientConfig = {
         new webpack.HotModuleReplacementPlugin(),
         new ExtractTextPlugin('[name].[contenthash:5].css'),
         new HtmlWebpackPlugin({
+            favicon: 'public/favicon.ico',
             template: 'public/index.html'
         }),
         new OpenBrowserPlugin({url: `http://localhost:${PORT}`, browser: 'chrome'}),

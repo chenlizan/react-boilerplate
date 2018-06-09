@@ -95,6 +95,7 @@ const clientConfig = {
             minChunks: Infinity,
         }),
         new HtmlWebpackPlugin({
+            favicon: 'public/favicon.ico',
             filename: 'index.html',
             template: 'public/index.html'
         }),
