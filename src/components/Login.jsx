@@ -4,12 +4,20 @@
 
 import React from 'react';
 import {Button, Checkbox, Form, Icon, Input, message} from 'antd';
+import styles from '../stylesheets/Login.css'
 
 const FormItem = Form.Item;
 
-import styles from '../stylesheets/Login.css'
-
 class LoginForm extends React.Component {
+    constructor(props) {
+        super(props)
+    }
+
+    static contextTypes = {}
+
+    static childContextTypes = {}
+
+    static getChildContext() {}
 
     componentDidUpdate() {
         const {result} = this.props;
@@ -24,11 +32,11 @@ class LoginForm extends React.Component {
                 console.log('Received values of form: ', values);
             }
         });
-    };
+    }
 
     info = (msg) => {
         message.info(msg);
-    };
+    }
 
     render() {
         const {getFieldDecorator} = this.props.form;
@@ -67,6 +75,9 @@ class LoginForm extends React.Component {
         );
     }
 }
+
+LoginForm.childContextTypes = {};
+
 
 const WrappedLoginForm = Form.create()(LoginForm);
 
