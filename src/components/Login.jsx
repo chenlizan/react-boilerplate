@@ -13,9 +13,9 @@ class LoginForm extends React.Component {
         super(props)
     }
 
-    static contextTypes = {}
+    static contextTypes = {};
 
-    static childContextTypes = {}
+    static childContextTypes = {};
 
     static getChildContext() {}
 
@@ -32,11 +32,11 @@ class LoginForm extends React.Component {
                 console.log('Received values of form: ', values);
             }
         });
-    }
+    };
 
     info = (msg) => {
         message.info(msg);
-    }
+    };
 
     render() {
         const {getFieldDecorator} = this.props.form;
@@ -72,12 +72,9 @@ class LoginForm extends React.Component {
                     Or <a href="">register now!</a>
                 </FormItem>
             </Form>
-        );
+        )
     }
 }
-
-LoginForm.childContextTypes = {};
-
 
 const WrappedLoginForm = Form.create()(LoginForm);
 

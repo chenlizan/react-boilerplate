@@ -17,7 +17,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         handleLoginRequested: bindActionCreators(login_requested_creator, dispatch)
-    };
+    }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
