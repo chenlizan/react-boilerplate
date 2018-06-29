@@ -6,7 +6,7 @@ import {handleActions} from "redux-actions"
 
 const initState = {
     account: {},
-    result: null
+    result: ''
 };
 
 const reducer = handleActions({

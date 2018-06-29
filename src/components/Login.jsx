@@ -3,6 +3,7 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import {Button, Checkbox, Form, Icon, Input, message} from 'antd';
 import styles from '../stylesheets/Login.css'
 
@@ -13,11 +14,8 @@ class LoginForm extends React.Component {
         super(props)
     }
 
-    static contextTypes = {};
-
-    static childContextTypes = {};
-
-    static getChildContext() {}
+    getChildContext() {
+    }
 
     componentDidUpdate() {
         const {result} = this.props;
@@ -75,6 +73,15 @@ class LoginForm extends React.Component {
         )
     }
 }
+
+LoginForm.propTypes = {
+    account: PropTypes.object,
+    result: PropTypes.string
+};
+
+LoginForm.contextTypes = {};
+
+LoginForm.childContextTypes = {};
 
 const WrappedLoginForm = Form.create()(LoginForm);
 
