@@ -89,6 +89,10 @@ const clientConfig = {
                 NODE_ENV: JSON.stringify('development')
             }
         }),
+        new webpack.DllReferencePlugin({
+            context: path.join(__dirname, ".", "dll"),
+            manifest: require("./dll/vendor-manifest.json")
+        }),
         new webpack.HotModuleReplacementPlugin(),
         new ExtractTextPlugin('[name].[contenthash:5].css'),
         new HtmlWebpackPlugin({
