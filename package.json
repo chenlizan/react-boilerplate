@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/chenlizan/react-boilerplate",
   "devDependencies": {
+    "add-asset-html-webpack-plugin": "^2.0.0",
     "antd": "^3.0.0",
     "babel-core": "^6.0.0",
     "babel-loader": "^7.0.0",
