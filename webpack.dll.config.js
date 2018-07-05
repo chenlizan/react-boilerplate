@@ -5,10 +5,6 @@ const webpack = require('webpack');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 
 const dll = {
-    // mode: "development || "production",
-    resolve: {
-        extensions: ['.js', '.json', '.jsx']
-    },
     entry: {
         vendor: ['antd', 'react', 'react-dom', 'react-redux', 'react-router', 'redux', 'redux-actions']
     },
@@ -16,6 +12,9 @@ const dll = {
         path: path.resolve(__dirname, 'dll'),
         filename: '[name].dll.js',
         library: '[name]_[chunkhash:5]'
+    },
+    resolve: {
+        extensions: ['.js', '.json', '.jsx']
     },
     plugins: [
         new webpack.DllPlugin({

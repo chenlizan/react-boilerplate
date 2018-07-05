@@ -8,6 +8,7 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
 const OpenBrowserPlugin = require('open-browser-webpack-plugin');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 
@@ -82,9 +83,7 @@ const clientConfig = {
     },
     plugins: [
         new webpack.DefinePlugin({
-            "process.env": {
-                NODE_ENV: JSON.stringify('development')
-            }
+            'process.env': {NODE_ENV: JSON.stringify('development')}
         }),
         new webpack.DllReferencePlugin({
             context: path.join(__dirname, ".", "dll"),
@@ -96,6 +95,7 @@ const clientConfig = {
             favicon: 'public/favicon.ico',
             template: 'public/index.html'
         }),
+        new HtmlWebpackIncludeAssetsPlugin({assets: ['../dll/vendor.dll.js'], append: false}),
         new OpenBrowserPlugin({url: `http://localhost:${PORT}`, browser: 'chrome'}),
         new ProgressBarPlugin()
     ],
