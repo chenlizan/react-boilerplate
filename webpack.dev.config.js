@@ -19,10 +19,7 @@ const clientConfig = {
         historyApiFallback: true
     },
     devtool: 'eval-source-map',
-    entry: [
-        'babel-polyfill',
-        path.resolve(__dirname, 'src/index'),
-    ],
+    entry: ['babel-polyfill', path.resolve(__dirname, 'src/index')],
     output: {
         chunkFilename: 'chunk.[chunkhash:5].js',
         filename: '[name].js',
