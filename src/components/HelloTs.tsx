@@ -8,6 +8,6 @@ export interface HelloProps {
 
 export default class HelloTs extends React.Component<HelloProps, {}> {
     render() {
-        return <p className={styles["hello"]}>Hello from {this.props.compiler} and {this.props.framework}!</p>;
+        return <p className={styles.hello}>Hello from {this.props.compiler} and {this.props.framework}!</p>;
     }
 }

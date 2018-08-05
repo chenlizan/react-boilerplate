@@ -2,7 +2,7 @@
   "compilerOptions": {
     "jsx": "react",
     "module": "commonjs",
-    "noImplicitAny": true,
+    "strict": true,
     "target": "esnext"
   },
   "exclude": [

@@ -60,30 +60,16 @@ const clientConfig = {
                     }
                 }
             },
-            // {
-            //     test: /\.css$/,
-            //     exclude: /node_modules/,
-            //     use: ExtractTextPlugin.extract({
-            //         fallback: 'style-loader',
-            //         use: [{
-            //             loader: 'css-loader',
-            //             options: {
-            //                 minimize: true,
-            //                 modules: true,
-            //                 localIdentName: '[path][name]__[local]--[hash:base64:5]'
-            //             }
-            //         }]
-            //     })
-            // },
             {
                 test: /\.css$/,
                 exclude: /node_modules/,
                 use: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
                     use: [{
-                        loader: 'typings-for-css-modules-loader',
+                        loader: 'typings-for-css-modules-loader', //'css-loader',
                         options: {
                             modules: true,
+                            namedExport: true,
                             localIdentName: '[path][name]__[local]--[hash:base64:5]'
                         }
                     }]
