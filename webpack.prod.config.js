@@ -76,6 +76,23 @@ const clientConfig = {
                 })
             },
             {
+                test: /\.less$/,
+                exclude: /node_modules/,
+                use: ExtractTextPlugin.extract({
+                    fallback: "style-loader",
+                    use: [{
+                        loader: 'typings-for-css-modules-loader', //'css-loader',
+                        options: {
+                            modules: true,
+                            namedExport: true,
+                            localIdentName: '[path][name]__[local]--[hash:base64:5]'
+                        }
+                    }, {
+                        loader: "less-loader"
+                    }]
+                })
+            },
+            {
                 test: /\.css$/,
                 include: /node_modules/,
                 use: ExtractTextPlugin.extract({

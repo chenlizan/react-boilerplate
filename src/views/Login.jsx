@@ -40,7 +40,7 @@ class LoginForm extends React.Component {
     render() {
         const {getFieldDecorator} = this.props.form;
         return (
-            <Form onSubmit={this.handleSubmit} className={styles["login-form"]}>
+            <Form onSubmit={this.handleSubmit} className={styles.login_form}>
                 <FormItem>
                     {getFieldDecorator('userName', {
                         rules: [{required: true, message: 'Please input your username!'}],
@@ -63,8 +63,8 @@ class LoginForm extends React.Component {
                     })(
                         <Checkbox>Remember me</Checkbox>
                     )}
-                    <a className={styles["login-form-forgot"]} href="">Forgot password</a>
-                    <Button type="primary" htmlType="submit" className={styles["login-form-button"]}>
+                    <a className={styles.login_form_forgot} href="">Forgot password</a>
+                    <Button type="primary" htmlType="submit" className={styles.login_form_button}>
                         Log in
                     </Button>
                     Or <a href="">register now!</a>
