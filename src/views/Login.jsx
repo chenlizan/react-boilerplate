@@ -5,6 +5,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Button, Checkbox, Form, Icon, Input, message} from 'antd';
+import HelloTs from '../components/HelloTs';
 import styles from '../stylesheets/Login.css'
 
 const FormItem = Form.Item;
@@ -38,7 +39,6 @@ class LoginForm extends React.Component {
 
     render() {
         const {getFieldDecorator} = this.props.form;
-
         return (
             <Form onSubmit={this.handleSubmit} className={styles["login-form"]}>
                 <FormItem>
@@ -69,6 +69,7 @@ class LoginForm extends React.Component {
                     </Button>
                     Or <a href="">register now!</a>
                 </FormItem>
+                <HelloTs compiler="TypeScript" framework="React"/>
             </Form>
         )
     }

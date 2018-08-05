@@ -4,7 +4,7 @@
 
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import Login from '../components/Login';
+import Login from '../views/Login';
 import {login_requested_creator} from '../action/index';
 
 function mapStateToProps(state) {

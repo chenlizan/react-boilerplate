@@ -35,11 +35,22 @@ const clientConfig = {
                 ]
             },
             {
+                test: /\.tsx?$/,
+                use: [
+                    {
+                        loader: 'ts-loader',
+                        options: {
+                            transpileOnly: true,
+                        }
+                    }
+                ]
+            },
+            {
                 test: /\.(js|jsx)$/,
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: ['env', 'es2015', 'react', 'stage-0'],
+                        presets: ['env', 'react', 'stage-0'],
                         plugins: [
                             ['import', [
                                 {'libraryName': 'antd', 'style': 'css'},
@@ -49,15 +60,29 @@ const clientConfig = {
                     }
                 }
             },
+            // {
+            //     test: /\.css$/,
+            //     exclude: /node_modules/,
+            //     use: ExtractTextPlugin.extract({
+            //         fallback: 'style-loader',
+            //         use: [{
+            //             loader: 'css-loader',
+            //             options: {
+            //                 minimize: true,
+            //                 modules: true,
+            //                 localIdentName: '[path][name]__[local]--[hash:base64:5]'
+            //             }
+            //         }]
+            //     })
+            // },
             {
                 test: /\.css$/,
                 exclude: /node_modules/,
                 use: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
                     use: [{
-                        loader: 'css-loader',
+                        loader: 'typings-for-css-modules-loader',
                         options: {
-                            minimize: true,
                             modules: true,
                             localIdentName: '[path][name]__[local]--[hash:base64:5]'
                         }
