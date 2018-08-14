@@ -12,8 +12,8 @@ const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 
 const clientConfig = {
     entry: {
-        client: ['babel-polyfill', path.resolve(__dirname, 'src/index')],
-        vendor: ['react', 'react-dom', 'react-redux', 'react-router', 'redux', 'redux-actions']
+        client: [path.resolve(__dirname, 'src/index')],
+        vendor: ['babel-polyfill', 'react', 'react-dom', 'react-redux', 'react-router', 'redux', 'redux-actions']
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -50,7 +50,7 @@ const clientConfig = {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: [['env', {'targets': {'browsers': ['> 1%', 'last 2 versions']}, 'loose': false}], 'react', 'stage-0'],
+                        presets: [['env', {'targets': {'browsers': ['> 1%', 'last 3 versions']}, 'loose': true}], 'react', 'stage-0'],
                         plugins: [
                             ['import', [
                                 {'libraryName': 'antd', 'style': 'css'},
