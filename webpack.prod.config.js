@@ -50,7 +50,7 @@ const clientConfig = {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: [['env', {'targets': {'browsers': ['> 1%', 'last 3 versions']}, 'loose': true}], 'react', 'stage-0'],
+                        presets: [['env', {'targets': {'browsers': ['defaults', 'ie >= 9']}, 'loose': false}], 'react', 'stage-0'],
                         plugins: [
                             ['import', [
                                 {'libraryName': 'antd', 'style': 'css'},
@@ -108,7 +108,7 @@ const clientConfig = {
         ]
     },
     resolve: {
-        extensions: ['.js', '.json', '.jsx']
+        extensions: ['.ts', '.tsx', '.js', '.json', '.jsx']
     },
     plugins: [
 
@@ -128,17 +128,14 @@ const clientConfig = {
         new ExtractTextPlugin('[name].[contenthash:5].css'),
         new webpack.optimize.UglifyJsPlugin({
             uglifyOptions: {
-                ie8: true,
                 ecma: 8,
                 compress: {
-                    warnings: false,
                     comparisons: false
                 },
                 output: {
-                    ascii_only: true,
-                    comments: false
+                    ascii_only: true
                 },
-                warnings: false
+                warnings: true
             }
         }),
         new ProgressBarPlugin()
