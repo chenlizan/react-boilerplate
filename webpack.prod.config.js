@@ -50,7 +50,7 @@ const clientConfig = {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: [['env', {'targets': {'browsers': ['defaults', 'ie >= 9']}, 'loose': false}], 'react', 'stage-0'],
+                        presets: [['env', {'targets': {'browsers': ['defaults', 'ie >= 9']}}], /*'es2015-ie',*/ 'react', 'stage-0'],
                         plugins: [
                             ['import', [
                                 {'libraryName': 'antd', 'style': 'css'},
