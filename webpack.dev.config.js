@@ -40,6 +40,12 @@ const clientConfig = {
                 ]
             },
             {
+                test: /\.(eot|svg|ttf|woff|woff2)(\?\S*)?$/,
+                use: [{
+                    loader: 'file-loader',
+                }]
+            },
+            {
                 test: /\.tsx?$/,
                 use: [
                     {
@@ -67,11 +73,11 @@ const clientConfig = {
             },
             {
                 test: /\.css$/,
-                exclude: /node_modules/,
+                exclude: [path.resolve(__dirname, 'node_modules'), path.resolve(__dirname, 'src/assets')],
                 use: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
                     use: [{
-                        loader: 'typings-for-css-modules-loader', //'css-loader',
+                        loader: 'typings-for-css-modules-loader',
                         options: {
                             modules: true,
                             namedExport: true,
@@ -81,12 +87,20 @@ const clientConfig = {
                 })
             },
             {
+                test: /\.css$/,
+                include: [path.resolve(__dirname, 'node_modules'), path.resolve(__dirname, 'src/assets')],
+                use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: ['css-loader']
+                })
+            },
+            {
                 test: /\.less$/,
-                exclude: /node_modules/,
+                exclude: [path.resolve(__dirname, 'node_modules'), path.resolve(__dirname, 'src/assets')],
                 use: ExtractTextPlugin.extract({
                     fallback: "style-loader",
                     use: [{
-                        loader: 'typings-for-css-modules-loader', //'css-loader',
+                        loader: 'css-loader',
                         options: {
                             modules: true,
                             namedExport: true,
@@ -98,11 +112,15 @@ const clientConfig = {
                 })
             },
             {
-                test: /\.css$/,
-                include: /node_modules/,
+                test: /\.less/,
+                include: [path.resolve(__dirname, 'node_modules'), path.resolve(__dirname, 'src/assets')],
                 use: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
-                    use: ['css-loader']
+                    use: [{
+                        loader: "css-loader"
+                    }, {
+                        loader: "less-loader"
+                    }]
                 })
             }
         ]

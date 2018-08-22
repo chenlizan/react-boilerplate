@@ -35,6 +35,12 @@ const clientConfig = {
                 ]
             },
             {
+                test: /\.(eot|svg|ttf|woff|woff2)(\?\S*)?$/,
+                use: [{
+                    loader: 'file-loader',
+                }]
+            },
+            {
                 test: /\.tsx?$/,
                 use: [
                     {
@@ -62,12 +68,13 @@ const clientConfig = {
             },
             {
                 test: /\.css$/,
-                exclude: /node_modules/,
+                exclude: [path.resolve(__dirname, 'node_modules'), path.resolve(__dirname, 'src/assets')],
                 use: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
                     use: [{
-                        loader: 'typings-for-css-modules-loader', //'css-loader',
+                        loader: 'typings-for-css-modules-loader',
                         options: {
+                            minimize: true,
                             modules: true,
                             namedExport: true,
                             localIdentName: '[path][name]__[local]--[hash:base64:5]'
@@ -76,13 +83,27 @@ const clientConfig = {
                 })
             },
             {
+                test: /\.css$/,
+                include: [path.resolve(__dirname, 'node_modules'), path.resolve(__dirname, 'src/assets')],
+                use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: [{
+                        loader: 'css-loader',
+                        options: {
+                            minimize: true
+                        }
+                    }]
+                })
+            },
+            {
                 test: /\.less$/,
-                exclude: /node_modules/,
+                exclude: [path.resolve(__dirname, 'node_modules'), path.resolve(__dirname, 'src/assets')],
                 use: ExtractTextPlugin.extract({
                     fallback: "style-loader",
                     use: [{
-                        loader: 'typings-for-css-modules-loader', //'css-loader',
+                        loader: 'css-loader',
                         options: {
+                            minimize: true,
                             modules: true,
                             namedExport: true,
                             localIdentName: '[path][name]__[local]--[hash:base64:5]'
@@ -93,8 +114,8 @@ const clientConfig = {
                 })
             },
             {
-                test: /\.css$/,
-                include: /node_modules/,
+                test: /\.less/,
+                include: [path.resolve(__dirname, 'node_modules'), path.resolve(__dirname, 'src/assets')],
                 use: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
                     use: [{
@@ -102,6 +123,8 @@ const clientConfig = {
                         options: {
                             minimize: true
                         }
+                    }, {
+                        loader: "less-loader"
                     }]
                 })
             }
@@ -111,7 +134,6 @@ const clientConfig = {
         extensions: ['.ts', '.tsx', '.js', '.json', '.jsx']
     },
     plugins: [
-
         new webpack.DefinePlugin({
             'process.env': {NODE_ENV: JSON.stringify('production')}
         }),
