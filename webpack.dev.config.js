@@ -66,7 +66,7 @@ const clientConfig = {
                             ['import', [
                                 {'libraryName': 'antd', 'style': 'css'},
                                 {'libraryName': 'antd-mobile', 'style': 'css'}
-                            ]],
+                            ]]
                         ]
                     }
                 }
@@ -77,11 +77,21 @@ const clientConfig = {
                 use: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
                     use: [{
-                        loader: 'typings-for-css-modules-loader',
+                        loader: 'css-loader',
                         options: {
+                            importLoaders: 1,
                             modules: true,
                             namedExport: true,
                             localIdentName: '[path][name]__[local]--[hash:base64:5]'
+                        }
+                    }, {
+                        loader: require.resolve('postcss-loader'),
+                        options: {
+                            ident: 'postcss',
+                            plugins: [
+                                require('postcss-flexbugs-fixes'),
+                                require('autoprefixer')({flexbox: 'no-2009'})
+                            ]
                         }
                     }]
                 })
@@ -102,13 +112,21 @@ const clientConfig = {
                     use: [{
                         loader: 'css-loader',
                         options: {
+                            importLoaders: 1,
                             modules: true,
                             namedExport: true,
                             localIdentName: '[path][name]__[local]--[hash:base64:5]'
                         }
                     }, {
-                        loader: "less-loader"
-                    }]
+                        loader: require.resolve('postcss-loader'),
+                        options: {
+                            ident: 'postcss',
+                            plugins: [
+                                require('postcss-flexbugs-fixes'),
+                                require('autoprefixer')({flexbox: 'no-2009'})
+                            ]
+                        }
+                    }, 'less-loader']
                 })
             },
             {
@@ -116,11 +134,7 @@ const clientConfig = {
                 include: [path.resolve(__dirname, 'node_modules'), path.resolve(__dirname, 'src/assets')],
                 use: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
-                    use: [{
-                        loader: "css-loader"
-                    }, {
-                        loader: "less-loader"
-                    }]
+                    use: ['css-loader', 'less-loader']
                 })
             }
         ]
@@ -133,8 +147,8 @@ const clientConfig = {
             'process.env': {NODE_ENV: JSON.stringify('development')}
         }),
         new webpack.DllReferencePlugin({
-            context: path.join(__dirname, ".", "dll"),
-            manifest: require("./dll/vendor-manifest.json")
+            context: path.join(__dirname, '.', 'dll'),
+            manifest: require('./dll/vendor-manifest.json')
         }),
         new webpack.HotModuleReplacementPlugin(),
         new ExtractTextPlugin('[name].[contenthash:5].css'),
@@ -151,6 +165,7 @@ const clientConfig = {
         fs: 'empty',
         net: 'empty',
         tls: 'empty',
+        child_process: 'empty'
     },
     target: 'web'
 };

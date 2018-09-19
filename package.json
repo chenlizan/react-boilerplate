@@ -1,6 +1,6 @@
 {
   "name": "react-boilerplate",
-  "version": "1.0.8",
+  "version": "1.1.0",
   "description": "React Boilerplate",
   "scripts": {
     "inst": "npm install",
@@ -25,6 +25,7 @@
     "@types/react": "^16.0.0",
     "@types/react-dom": "^16.0.0",
     "antd": "^3.0.0",
+    "autoprefixer": "^9.1.5",
     "babel-core": "^6.0.0",
     "babel-loader": "^7.0.0",
     "babel-plugin-import": "^1.0.0",
@@ -43,6 +44,8 @@
     "less": "^2.0.0",
     "less-loader": "^3.0.0",
     "open-browser-webpack-plugin": "0.0.5",
+    "postcss-flexbugs-fixes": "^4.1.0",
+    "postcss-loader": "^3.0.0",
     "progress-bar-webpack-plugin": "^1.0.0",
     "prop-types": "^15.0.0",
     "react": "^16.0.0",
@@ -60,5 +63,11 @@
     "typings-for-css-modules-loader": "^1.7.0",
     "webpack": "^3.0.0",
     "webpack-dev-server": "^2.0.0"
-  }
+  },
+  "browserslist": [
+    ">1%",
+    "last 4 versions",
+    "Firefox ESR",
+    "not ie < 9"
+  ]
 }

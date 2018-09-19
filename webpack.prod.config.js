@@ -56,12 +56,12 @@ const clientConfig = {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: [['env', {'targets': {'browsers': ['defaults', 'ie >= 9']}}], /*'es2015-ie',*/ 'react', 'stage-0'],
+                        presets: ['env', /*'es2015-ie',*/ 'react', 'stage-0'],
                         plugins: [
                             ['import', [
                                 {'libraryName': 'antd', 'style': 'css'},
                                 {'libraryName': 'antd-mobile', 'style': 'css'}
-                            ]],
+                            ]]
                         ]
                     }
                 }
@@ -72,12 +72,22 @@ const clientConfig = {
                 use: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
                     use: [{
-                        loader: 'typings-for-css-modules-loader',
+                        loader: 'css-loader',
                         options: {
+                            importLoaders: 1,
                             minimize: true,
                             modules: true,
                             namedExport: true,
                             localIdentName: '[path][name]__[local]--[hash:base64:5]'
+                        }
+                    }, {
+                        loader: require.resolve('postcss-loader'),
+                        options: {
+                            ident: 'postcss',
+                            plugins: [
+                                require('postcss-flexbugs-fixes'),
+                                require('autoprefixer')({flexbox: 'no-2009'})
+                            ]
                         }
                     }]
                 })
@@ -103,14 +113,22 @@ const clientConfig = {
                     use: [{
                         loader: 'css-loader',
                         options: {
+                            importLoaders: 1,
                             minimize: true,
                             modules: true,
                             namedExport: true,
                             localIdentName: '[path][name]__[local]--[hash:base64:5]'
                         }
                     }, {
-                        loader: "less-loader"
-                    }]
+                        loader: require.resolve('postcss-loader'),
+                        options: {
+                            ident: 'postcss',
+                            plugins: [
+                                require('postcss-flexbugs-fixes'),
+                                require('autoprefixer')({flexbox: 'no-2009'})
+                            ]
+                        }
+                    }, 'less-loader']
                 })
             },
             {
@@ -123,9 +141,7 @@ const clientConfig = {
                         options: {
                             minimize: true
                         }
-                    }, {
-                        loader: "less-loader"
-                    }]
+                    }, 'less-loader']
                 })
             }
         ]
@@ -167,6 +183,7 @@ const clientConfig = {
         fs: 'empty',
         net: 'empty',
         tls: 'empty',
+        child_process: 'empty'
     },
     target: 'web'
 };
