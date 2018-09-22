@@ -108,7 +108,7 @@ const clientConfig = {
                 test: /\.less$/,
                 exclude: [path.resolve(__dirname, 'node_modules'), path.resolve(__dirname, 'src/assets')],
                 use: ExtractTextPlugin.extract({
-                    fallback: "style-loader",
+                    fallback: 'style-loader',
                     use: [{
                         loader: 'css-loader',
                         options: {

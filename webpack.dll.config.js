@@ -18,8 +18,8 @@ const dll = {
     },
     plugins: [
         new webpack.DllPlugin({
-            context: path.join(__dirname, ".", "dll"),
-            path: path.join(__dirname, "dll", "[name]-manifest.json"),
+            context: path.join(__dirname, '.', 'dll'),
+            path: path.join(__dirname, 'dll', '[name]-manifest.json'),
             name: '[name]_[chunkhash:5]'
         }),
         new ProgressBarPlugin()
