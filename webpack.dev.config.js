@@ -6,6 +6,7 @@
 
 const path = require('path');
 const webpack = require('webpack');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
@@ -66,7 +67,7 @@ const clientConfig = {
                             ['import', [
                                 {'libraryName': 'antd', 'style': 'css'},
                                 {'libraryName': 'antd-mobile', 'style': 'css'}
-                            ]]
+                            ]], 'lodash'
                         ]
                     }
                 }
@@ -158,6 +159,7 @@ const clientConfig = {
         }),
         new HtmlWebpackIncludeAssetsPlugin({assets: ['../dll/vendor.dll.js'], append: false}),
         new OpenBrowserPlugin({url: `http://localhost:${PORT}`, browser: 'chrome'}),
+        new BundleAnalyzerPlugin(),
         new ProgressBarPlugin()
     ],
     node: {
