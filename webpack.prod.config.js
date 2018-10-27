@@ -6,6 +6,7 @@
 
 const path = require('path');
 const webpack = require('webpack');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
@@ -13,7 +14,7 @@ const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const clientConfig = {
     entry: {
         client: [path.resolve(__dirname, 'src/index')],
-        vendor: ['babel-polyfill', 'react', 'react-dom', 'react-redux', 'react-router', 'redux', 'redux-actions']
+        vendor: ['babel-polyfill', 'react', 'react-dom', 'react-redux', 'react-router-dom', 'redux', 'redux-actions']
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -176,6 +177,7 @@ const clientConfig = {
                 warnings: true
             }
         }),
+        new BundleAnalyzerPlugin(),
         new ProgressBarPlugin()
     ],
     node: {

@@ -20,7 +20,7 @@ class LoginForm extends React.Component {
 
     componentDidUpdate() {
         const {result} = this.props;
-        result ? this.info(result) : '';
+        void (result ? this.info(result) : '');
     }
 
     handleSubmit = (e) => {
