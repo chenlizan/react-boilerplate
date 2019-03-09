@@ -1,9 +1,11 @@
 {
   "compilerOptions": {
+    "outDir": "build",
     "jsx": "react",
     "module": "commonjs",
+    "moduleResolution": "node",
     "strict": true,
-    "target": "es5"
+    "target": "es6"
   },
   "exclude": [
     "node_modules"
