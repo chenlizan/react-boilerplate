@@ -10,6 +10,7 @@ import styles from '../stylesheets/Login.css'
 
 const FormItem = Form.Item;
 
+@Form.create()
 class LoginForm extends React.Component {
     constructor(props) {
         super(props)
@@ -84,6 +85,4 @@ LoginForm.contextTypes = {};
 
 LoginForm.childContextTypes = {};
 
-const WrappedLoginForm = Form.create()(LoginForm);
-
-export default WrappedLoginForm;
+export default LoginForm;
