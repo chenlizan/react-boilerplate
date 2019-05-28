@@ -15,9 +15,17 @@ class LoginForm extends React.Component {
     constructor(props) {
         super(props)
     }
+    
+    static propTypes = {
+        account: PropTypes.object,
+        result: PropTypes.string
+    };
 
-    getChildContext() {
-    }
+    static contextTypes = {};
+
+    static childContextTypes = {};
+
+    getChildContext() {};
 
     componentDidUpdate() {
         const {result} = this.props;
@@ -75,14 +83,5 @@ class LoginForm extends React.Component {
         )
     }
 }
-
-LoginForm.propTypes = {
-    account: PropTypes.object,
-    result: PropTypes.string
-};
-
-LoginForm.contextTypes = {};
-
-LoginForm.childContextTypes = {};
 
 export default LoginForm;
