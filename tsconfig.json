@@ -2,10 +2,11 @@
   "compilerOptions": {
     "outDir": "build",
     "jsx": "react",
-    "module": "commonjs",
+    "module": "esnext",
     "moduleResolution": "node",
     "strict": true,
-    "target": "es6"
+    "target": "esnext",
+    "sourceMap": true
   },
   "exclude": [
     "node_modules"
