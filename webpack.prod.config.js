@@ -114,7 +114,7 @@ const clientConfig = {
                     use: [{
                         loader: 'css-loader',
                         options: {
-                            importLoaders: 1,
+                            importLoaders: 2,
                             minimize: true,
                             modules: true,
                             namedExport: true,
