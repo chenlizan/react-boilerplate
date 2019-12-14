@@ -5,6 +5,7 @@ const webpack = require('webpack');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 
 const dll = {
+    mode: 'development',
     entry: {
         vendor: ['antd', 'react', 'react-dom', 'react-redux', 'react-router-dom', 'redux', 'redux-actions']
     },

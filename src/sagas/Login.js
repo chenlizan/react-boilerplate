@@ -2,8 +2,7 @@
  * Created by chenlizan on 2018/5/4.
  */
 
-import {delay} from 'redux-saga';
-import {call, put, takeEvery} from 'redux-saga/effects';
+import {call, delay, put, takeEvery} from 'redux-saga/effects';
 import {login_succeeded_creator, login_failed_creator} from '../action'
 
 function* loginProcess(action) {

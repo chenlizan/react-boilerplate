@@ -1,26 +1,22 @@
-/**
- * Created by chenlizan on 2017/8/11.
- */
-
-'use strict';
-
 const path = require('path');
 const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
 const OpenBrowserPlugin = require('open-browser-webpack-plugin');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
+const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
+const StylelintPlugin = require('stylelint-webpack-plugin');
 
-const PORT = 3000;
+const PORT = 4000;
 
 const clientConfig = {
+    mode: 'development',
     devServer: {
         port: PORT,
         historyApiFallback: true
     },
     devtool: 'eval-source-map',
-    entry: ['babel-polyfill', path.resolve(__dirname, 'src/index')],
+    entry: ['@babel/polyfill', path.resolve(__dirname, 'src/index')],
     output: {
         chunkFilename: 'chunk.[chunkhash:5].js',
         filename: '[name].js',
@@ -29,60 +25,50 @@ const clientConfig = {
     module: {
         rules: [
             {
-                test: /\.(png|jpg|gif)$/,
-                use: [
-                    {
-                        loader: 'file-loader',
-                        options: {
-                            limit: 8192
-                        }
-                    }
-                ]
-            },
-            {
-                test: /\.(eot|svg|ttf|woff|woff2)(\?\S*)?$/,
+                test: /\.(js|jsx)$/,
                 use: [{
-                    loader: 'file-loader',
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['@babel/preset-env', '@babel/preset-react', '@babel/preset-typescript'],
+                        plugins: [
+                            ['@babel/plugin-proposal-decorators', {'legacy': true}],
+                            ['@babel/plugin-proposal-class-properties', {'loose': true}],
+                            ['import', {'libraryName': 'antd', 'style': 'css'}, 'ant'],
+                            ['import', {'libraryName': 'antd-mobile', 'style': 'css'}, 'ant-mobile'],
+                            ['lodash']
+                        ]
+                    }
                 }]
             },
             {
                 test: /\.tsx?$/,
-                use: [
-                    {
-                        loader: 'ts-loader',
-                        options: {
-                            transpileOnly: true,
-                        }
-                    }
-                ]
+                use: [{
+                    loader: 'ts-loader',
+                    options: {transpileOnly: true,}
+                }]
             },
             {
-                test: /\.(js|jsx)$/,
-                use: {
-                    loader: 'babel-loader',
-                    options: {
-                        presets: ['env', 'es2015', 'react', 'stage-0'],
-                        plugins: [
-                            ['import', [
-                                {'libraryName': 'antd', 'style': 'css'},
-                                {'libraryName': 'antd-mobile', 'style': 'css'}
-                            ]], 'lodash', 'transform-decorators-legacy'
-                        ]
-                    }
-                }
+                test: /\.(png|jpg|gif)$/,
+                use: [{
+                    loader: 'file-loader',
+                    options: {limit: 8192}
+                }]
+            },
+            {
+                test: /\.(eot|svg|ttf|woff|woff2)(\?\S*)?$/,
+                use: [{loader: 'file-loader'}]
             },
             {
                 test: /\.css$/,
                 exclude: [path.resolve(__dirname, 'node_modules'), path.resolve(__dirname, 'src/assets')],
-                use: ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
-                    use: [{
+                use: [{loader: 'style-loader'},
+                    {
                         loader: 'css-loader',
                         options: {
                             importLoaders: 1,
-                            modules: true,
-                            namedExport: true,
-                            localIdentName: '[path][name]__[local]--[hash:base64:5]'
+                            modules: {
+                                getLocalIdent: getCSSModuleLocalIdent
+                            }
                         }
                     }, {
                         loader: require.resolve('postcss-loader'),
@@ -94,28 +80,23 @@ const clientConfig = {
                             ]
                         }
                     }]
-                })
             },
             {
                 test: /\.css$/,
                 include: [path.resolve(__dirname, 'node_modules'), path.resolve(__dirname, 'src/assets')],
-                use: ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
-                    use: ['css-loader']
-                })
+                use: [{loader: 'style-loader'}, {loader: 'css-loader'}]
             },
             {
                 test: /\.less$/,
                 exclude: [path.resolve(__dirname, 'node_modules'), path.resolve(__dirname, 'src/assets')],
-                use: ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
-                    use: [{
+                use: [{loader: 'style-loader'},
+                    {
                         loader: 'css-loader',
                         options: {
                             importLoaders: 2,
-                            modules: true,
-                            namedExport: true,
-                            localIdentName: '[path][name]__[local]--[hash:base64:5]'
+                            modules: {
+                                getLocalIdent: getCSSModuleLocalIdent
+                            }
                         }
                     }, {
                         loader: require.resolve('postcss-loader'),
@@ -126,16 +107,19 @@ const clientConfig = {
                                 require('autoprefixer')({flexbox: 'no-2009'})
                             ]
                         }
-                    }, 'less-loader']
-                })
+                    }, {
+                        loader: "less-loader",
+                        options: {javascriptEnabled: true}
+                    }]
             },
             {
                 test: /\.less/,
                 include: [path.resolve(__dirname, 'node_modules'), path.resolve(__dirname, 'src/assets')],
-                use: ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
-                    use: ['css-loader', 'less-loader']
-                })
+                use: [{loader: 'style-loader'}, {loader: 'css-loader'},
+                    {
+                        loader: "less-loader",
+                        options: {javascriptEnabled: true}
+                    }]
             }
         ]
     },
@@ -144,25 +128,27 @@ const clientConfig = {
     },
     plugins: [
         new webpack.DefinePlugin({
-            'process.env': {NODE_ENV: JSON.stringify('development')}
+            'process.env.NODE_ENV': JSON.stringify('development')
+        }),
+        new HtmlWebpackPlugin({
+            template: 'public/index.html'
         }),
         new webpack.DllReferencePlugin({
             context: path.join(__dirname, '.', 'dll'),
             manifest: require('./dll/vendor-manifest.json')
         }),
-        new webpack.HotModuleReplacementPlugin(),
-        new ExtractTextPlugin('[name].[contenthash:5].css'),
-        new HtmlWebpackPlugin({
-            favicon: 'public/favicon.ico',
-            template: 'public/index.html'
-        }),
         new HtmlWebpackIncludeAssetsPlugin({assets: ['../dll/vendor.dll.js'], append: false}),
+        new StylelintPlugin({configFile: '.stylelintrc', files: '**/*.(c|le)ss', fix: true}),
+        new webpack.HotModuleReplacementPlugin(),
         new OpenBrowserPlugin({url: `http://localhost:${PORT}`, browser: 'chrome'}),
         new ProgressBarPlugin()
     ],
     node: {
+        module: 'empty',
         dgram: 'empty',
+        dns: 'mock',
         fs: 'empty',
+        http2: 'empty',
         net: 'empty',
         tls: 'empty',
         child_process: 'empty'
