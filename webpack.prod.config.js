@@ -164,7 +164,7 @@ const clientConfig = {
                         ]
                     }
                 }, {
-                    loader: "less-loader",
+                    loader: 'less-loader',
                     options: {javascriptEnabled: true}
                 }]
             },
@@ -181,7 +181,7 @@ const clientConfig = {
                 }, {
                     loader: 'css-loader'
                 }, {
-                    loader: "less-loader",
+                    loader: 'less-loader',
                     options: {javascriptEnabled: true}
                 }]
             }
