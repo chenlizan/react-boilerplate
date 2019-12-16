@@ -1,6 +1,7 @@
 const isWsl = require('is-wsl');
 const path = require('path');
 const webpack = require('webpack');
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
@@ -193,6 +194,7 @@ const clientConfig = {
         new webpack.DefinePlugin({
             'process.env': {NODE_ENV: JSON.stringify('production')}
         }),
+        new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
             filename: 'index.html',
             template: 'public/index.html',
@@ -202,7 +204,9 @@ const clientConfig = {
             filename: 'static/css/[name].css',
             chunkFilename: 'static/css/[name].[chunkhash:5].chunk.css'
         }),
-        // new BundleAnalyzerPlugin(),
+        new BundleAnalyzerPlugin({
+            analyzerMode: 'static'
+        }),
         new ProgressBarPlugin()
     ],
     node: {
