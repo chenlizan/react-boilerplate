@@ -44,6 +44,7 @@ class LoginForm extends React.Component {
 
     info = (msg) => {
         message.info(msg);
+        this.props.history.push('/fabric');
     };
 
     render() {

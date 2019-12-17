@@ -16,12 +16,18 @@ const Login = Loadable({
     loading: () => null
 });
 
+const FabricView = Loadable({
+    loader: () => import('../views/FabricView'),
+    loading: () => null
+});
+
 export const routes = (
     <HashRouter>
         <App>
             <Switch>
                 <Route path="/" exact component={Login}/>
                 <Route path="/login" component={Login}/>
+                <Route path="/fabric" component={FabricView}/>
             </Switch>
         </App>
     </HashRouter>
