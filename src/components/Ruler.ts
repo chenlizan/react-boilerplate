@@ -1,19 +1,27 @@
 import {fabric} from 'fabric';
+import Diagram, {DiagramProps} from './Diagram';
 
 
-export default class Ruler {
+interface RulerProps extends DiagramProps {
+    scale?: number
+}
 
-    private _object: Array<fabric.Object> = [];
-    private _scale: number = 30;
-    private _height: number = 5;
+export default class Ruler extends Diagram<RulerProps> {
+
+    private readonly _object: fabric.Object[] = [];
     private _x: number = 1;
     private _y: number = 1;
-    private _offset: number = 5;
     private _color: string = 'black';
     private _fontSize: number = 16;
+    private _height: number = 5;
+    private _offset: number = 5;
+    private _scale: number = 30;
 
-    getObject(): Array<fabric.Object> {
-        return this._object;
+
+    constructor(props?: Readonly<RulerProps>) {
+        super(props);
+        this._x = props && props.x ? props.x : this._x;
+        this._y = props && props.y ? props.y : this._y;
     }
 
     getScale(): number {
@@ -25,11 +33,11 @@ export default class Ruler {
     }
 
     getHeight(): number {
-        return this._height;
+        return this._height * 8;
     }
 
     setHeight(value: number) {
-        this._height = value;
+        this._height = value / 8;
     }
 
     getX(): number {
@@ -72,38 +80,40 @@ export default class Ruler {
         this._fontSize = value;
     }
 
-    generate() {
+    generate(): fabric.Object[] {
         for (let i = 1; i <= this._scale; i++) {
             this._object.push(
                 new fabric.Line([this._x + this._offset * i, this._y, this._x + this._offset * i, this._y + this._height], {
                         selectable: false,
-                        stroke: 'black',
+                        stroke: this._color,
                         strokeWidth: 1,
                     }
                 )
             );
-            if (i % 5 === 1) {
+            if (i % 5 === 1 || i === this._scale) {
                 this._object.push(
                     new fabric.Line([this._x + this._offset * i, this._y + this._height, this._x + this._offset * i, this._y + this._height * 2], {
                             selectable: false,
-                            stroke: 'black',
+                            stroke: this._color,
                             strokeWidth: 1,
                         }
                     )
                 );
-                if (i % 10 === 1) {
+                if (i % 10 === 1 && i !== 1) {
                     this._object.push(
                         new fabric.Text(String(i - 1), {
-                            fontSize: 16,
-                            top: this._height * 2,
-                            left: this._x + this._offset * (i - 1)
+                            selectable: false,
+                            fontSize: this._fontSize,
+                            shadow: 'rgba(0,0,0,0.3) 5px 5px 5px',
+                            top: this._y + (this._height * 7 - this._fontSize) / 2,
+                            left: this._x + this._offset * (i - 1) - (i.toString().length > 1 ? i.toString().length * this._fontSize / 7 : 0)
                         })
                     );
                 }
                 this._object.push(
                     new fabric.Line([this._x + this._offset * i, this._y + this._height * 6, this._x + this._offset * i, this._y + this._height * 7], {
                             selectable: false,
-                            stroke: 'black',
+                            stroke: this._color,
                             strokeWidth: 1,
                         }
                     )
@@ -112,7 +122,7 @@ export default class Ruler {
             this._object.push(
                 new fabric.Line([this._x + this._offset * i, this._y + this._height * 7, this._x + this._offset * i, this._y + this._height * 8], {
                         selectable: false,
-                        stroke: 'black',
+                        stroke: this._color,
                         strokeWidth: 1,
                     }
                 )

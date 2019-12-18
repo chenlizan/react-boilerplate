@@ -25,7 +25,7 @@ export const routes = (
     <HashRouter>
         <App>
             <Switch>
-                <Route path="/" exact component={Login}/>
+                <Route path="/" exact component={FabricView}/>
                 <Route path="/login" component={Login}/>
                 <Route path="/fabric" component={FabricView}/>
             </Switch>
