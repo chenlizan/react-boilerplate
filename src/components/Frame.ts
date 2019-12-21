@@ -10,46 +10,29 @@ interface FrameProps extends DiagramProps {
 export default class Frame extends Diagram<FrameProps> {
 
     private readonly TABLETITLE: string[] = ['工程标尺', '月', '日', '进度标尺', '星期', '工程周'];
+    private readonly TABLELEFTWIDTH: number = 100;
+    private readonly TABLEBORDERWIDTH: number = 2;
 
     private readonly _object: fabric.Object[] = [];
-    private _x: number = 1;
-    private _y: number = 1;
+
     private _width: number = 800;
     private _height: number = 600;
-    private _color: string = 'black';
-    private _fontSize: number = 16;
-    private _lineHeight: number = 40;
 
     constructor(props?: Readonly<FrameProps>) {
         super(props);
-        this._x = props && props.x ? props.x : this._x;
-        this._y = props && props.y ? props.y : this._y;
-        this._width = props && props.width ? props.width : this._width;
+        if (props && props.width) {
+            this.setWidth(props.width);
+            this._width = this.getWidth();
+        }
         this._height = props && props.height ? props.height : this._height;
     }
 
-    getX(): number {
-        return this._x;
+    getWidth(): number {
+        return this.TABLELEFTWIDTH + this.getScale() * this.getOffset();
     }
 
-    setX(value: number) {
-        this._x = value;
-    }
-
-    getY(): number {
-        return this._y;
-    }
-
-    setY(value: number) {
-        this._y = value;
-    }
-
-    getWeight(): number {
-        return this._width;
-    }
-
-    setWeight(value: number) {
-        this._width = value;
+    setWidth(value: number) {
+        this.setScale((value - this.TABLELEFTWIDTH) / this.getOffset());
     }
 
     getHeight(): number {
@@ -60,133 +43,133 @@ export default class Frame extends Diagram<FrameProps> {
         this._height = value;
     }
 
-    getColor(): string {
-        return this._color;
+    setCycleCell(cycleCell: any) {
+        cycleCell.setLineHeight(this.getLineHeight());
+        cycleCell.setOffset(this.getOffset());
+        cycleCell.setScale(this.getScale());
+        cycleCell.setX(this.TABLELEFTWIDTH + this.getX());
+        cycleCell.setY(this.getHeight() - this.getY() - this.getLineHeight());
     }
 
-    setColor(value: string) {
-        this._color = value;
-    }
-
-    getLineHeight(): number {
-        return this._lineHeight;
-    }
-
-    setLineHeight(value: number) {
-        this._lineHeight = value;
+    setMonthCell(monthCell: any) {
+        monthCell.setLineHeight(this.getLineHeight());
+        monthCell.setOffset(this.getOffset());
+        monthCell.setScale(this.getScale());
+        monthCell.setX(this.TABLELEFTWIDTH + this.getX());
+        monthCell.setY(this.getY() + this.getLineHeight());
     }
 
     setRuler(ruler: any, position: 'top' | 'bottom') {
-        ruler.setHeight(this._lineHeight);
-        ruler.setX(95 + this._x);
+        ruler.setLineHeight(this.getLineHeight());
+        ruler.setOffset(this.getOffset());
+        ruler.setScale(this.getScale());
+        ruler.setX(this.TABLELEFTWIDTH + this.getX());
         position === 'top'
-            ? ruler.setY(this._y)
-            : ruler.setY((this._height - this._y - this._lineHeight * 3));
+            ? ruler.setY(this.getY())
+            : ruler.setY(this.getHeight() - this.getY() - this.getLineHeight() * 3);
+    }
+
+    textStyle(text: string, index: number) {
+        return {
+            selectable: false,
+            fontSize: this.getFontSize(),
+            fontWeight: 'bold',
+            shadow: 'rgba(0,0,0,0.3) 5px 5px 5px',
+            top: index > 3 ? (this.getHeight() - this.getY() - this.getLineHeight() * 3) + this.getLineHeight() * (index - 4) + ((this.getLineHeight() - this.getFontSize()) / 2)
+                : this.getY() + this.getLineHeight() * (index - 1) + ((this.getLineHeight() - this.getFontSize()) / 2),
+            left: this.getX() + (this.TABLELEFTWIDTH - (this.getFontSize()) * text.length) / 2
+        }
     }
 
     generate(): fabric.Object[] {
-
         for (let i = 1; i <= 4; i++) {
             this._object.push(
                 new fabric.Line(
                     [
-                        this._x,
-                        this._y + this._lineHeight * (i - 1),
-                        this._width - this._x,
-                        this._y + this._lineHeight * (i - 1)
+                        this.getX(),
+                        this.getY() + this.getLineHeight() * (i - 1),
+                        this.getWidth() - this.getX() + this.TABLEBORDERWIDTH,
+                        this.getY() + this.getLineHeight() * (i - 1)
                     ],
                     {
                         selectable: false,
-                        stroke: this._color,
+                        stroke: this.getColor(),
+                        strokeWidth: 1,
+                    }
+                )
+            );
+            this._object.push(
+                new fabric.Line(
+                    [
+                        this.getX(),
+                        (this.getHeight() - this.getY() - this.getLineHeight() * 3) + this.getLineHeight() * (i - 1),
+                        this.getWidth() - this.getX() + this.TABLEBORDERWIDTH,
+                        (this.getHeight() - this.getY() - this.getLineHeight() * 3) + this.getLineHeight() * (i - 1)
+                    ],
+                    {
+                        selectable: false,
+                        stroke: this.getColor(),
                         strokeWidth: 1,
                     }
                 )
             );
         }
 
-        for (let i = 1; i <= 4; i++) {
+        this._object.push(
+            new fabric.Line(
+                [
+                    this.getX(),
+                    this.getY(),
+                    this.getX(),
+                    this.getHeight() - this.getY()
+                ],
+                {
+                    selectable: false,
+                    stroke: this.getColor(),
+                    strokeWidth: 1,
+                }
+            )
+        );
+
+        this._object.push(
+            new fabric.Line(
+                [
+                    this.TABLELEFTWIDTH + this.getX(),
+                    this.getY(),
+                    this.TABLELEFTWIDTH + this.getX(),
+                    this.getHeight() - this.getY()
+                ],
+                {
+                    selectable: false,
+                    stroke: this.getColor(),
+                    strokeWidth: 1,
+                }
+            )
+        );
+
+        this._object.push(
+            new fabric.Line(
+                [
+                    this.getWidth() - this.getX() + this.TABLEBORDERWIDTH,
+                    this.getY(),
+                    this.getWidth() - this.getX() + this.TABLEBORDERWIDTH,
+                    this.getHeight() - this.getY()
+                ],
+                {
+                    selectable: false,
+                    stroke: this.getColor(),
+                    strokeWidth: 1,
+                }
+            )
+        );
+
+        for (let i = 1; i <= this.TABLETITLE.length; i++) {
             this._object.push(
-                new fabric.Line(
-                    [
-                        this._x,
-                        (this._height - this._y - this._lineHeight * 3) + this._lineHeight * (i - 1),
-                        this._width - this._x,
-                        (this._height - this._y - this._lineHeight * 3) + this._lineHeight * (i - 1)
-                    ],
-                    {
-                        selectable: false,
-                        stroke: this._color,
-                        strokeWidth: 1,
-                    }
-                )
-            );
-
-
-        }
-
-        this._object.push(
-            new fabric.Line(
-                [
-                    this._x,
-                    this._y,
-                    this._x,
-                    this._height - this._y
-                ],
-                {
-                    selectable: false,
-                    stroke: this._color,
-                    strokeWidth: 1,
-                }
-            )
-        );
-
-        this._object.push(
-            new fabric.Line(
-                [
-                    100 + this._x,
-                    this._y,
-                    100 + this._x,
-                    this._height - this._y
-                ],
-                {
-                    selectable: false,
-                    stroke: this._color,
-                    strokeWidth: 1,
-                }
-            )
-        );
-
-        this._object.push(
-            new fabric.Line(
-                [
-                    this._width - this._x,
-                    this._y,
-                    this._width - this._x,
-                    this._height - this._y
-                ],
-                {
-                    selectable: false,
-                    stroke: this._color,
-                    strokeWidth: 1,
-                }
-            )
-        );
-
-        for (let i = 1; i <= 6; i++) {
-
-            this._object.push(
-                new fabric.Text(this.TABLETITLE[i - 1], {
-                    selectable: false,
-                    fontSize: this._fontSize,
-                    fontWeight: 'bold',
-                    shadow: 'rgba(0,0,0,0.3) 5px 5px 5px',
-                    top: i > 3 ? (this._height - this._y - this._lineHeight * 3) + this._lineHeight * (i - 4) + ((this._lineHeight - this._fontSize) / 2)
-                        : this._y + this._lineHeight * (i - 1) + ((this._lineHeight - this._fontSize) / 2),
-                    left: this._x + (100 - (this._lineHeight / 2 - 3) * this.TABLETITLE[i - 1].length) / 2
-                })
+                new fabric.Text(this.TABLETITLE[i - 1], this.textStyle(this.TABLETITLE[i - 1], i))
             );
         }
 
         return this._object;
     }
+
 }
