@@ -20,6 +20,9 @@ export default class Frame extends Diagram<FrameProps> {
     private readonly _object: fabric.Object[] = [];
     private _width: number = 800;
     private _height: number = 600;
+    private _day: number = 6;
+    private _startTime: Date = new Date();
+    private _weekCycle: number = 2;
 
     private _cycleCell: any | undefined;
     private _dayCell: any | undefined;
@@ -64,16 +67,13 @@ export default class Frame extends Diagram<FrameProps> {
         this.CANVAS.add(...this._rulerTop.generate());
         this.CANVAS.add(...this._rulerBottom.generate());
         this.CANVAS.add(...this.generate());
-
     }
 
     reDraw(): void {
-        this.CANVAS.remove(...this._cycleCell.generate());
-        this.CANVAS.remove(...this._dayCell.generate());
-        this.CANVAS.remove(...this._monthCell.generate());
-        this.CANVAS.remove(...this._rulerTop.generate());
-        this.CANVAS.remove(...this._rulerBottom.generate());
-        this.CANVAS.remove(...this.generate());
+        this._object.length = 0;
+        this.CANVAS.remove(...this.CANVAS.getObjects());
+        this.CANVAS.setWidth(this.getWidth() + Frame.TABLEBORDERWIDTH);
+        this.CANVAS.setHeight(this.getHeight());
         this.init();
     }
 
@@ -81,7 +81,7 @@ export default class Frame extends Diagram<FrameProps> {
         return Frame.TABLELEFTWIDTH + this.getScale() * this.getOffset();
     }
 
-    setWidth(value: number) {
+    setWidth(value: number): void {
         this.setScale((value - Frame.TABLELEFTWIDTH) / this.getOffset());
     }
 
@@ -89,11 +89,36 @@ export default class Frame extends Diagram<FrameProps> {
         return this._height;
     }
 
-    setHeight(value: number) {
+    setHeight(value: number): void {
         this._height = value;
     }
 
+    getDay(): number {
+        return this._day;
+    }
+
+    setDay(value: number) {
+        this._day = value;
+    }
+
+    getStartTime() {
+        return this._startTime;
+    }
+
+    setStartTime(value: Date) {
+        this._startTime = value;
+    }
+
+    getWeekCycle(): number {
+        return this._weekCycle;
+    }
+
+    setWeekCycle(value: number): void {
+        this._weekCycle = value;
+    }
+
     private setCycleCell(cycleCell: any) {
+        cycleCell.setCycle(this.getWeekCycle());
         cycleCell.setLineHeight(this.getLineHeight());
         cycleCell.setOffset(this.getOffset());
         cycleCell.setScale(this.getScale());
@@ -102,9 +127,11 @@ export default class Frame extends Diagram<FrameProps> {
     }
 
     private setDayCell(dayCell: any) {
+        dayCell.setDay(this.getDay());
         dayCell.setLineHeight(this.getLineHeight());
         dayCell.setOffset(this.getOffset());
         dayCell.setScale(this.getScale());
+        dayCell.setStartTime(this.getStartTime());
         dayCell.setX(Frame.TABLELEFTWIDTH + this.getX());
         dayCell.setY(this.getY() + this.getLineHeight() * 2);
     }
@@ -113,6 +140,7 @@ export default class Frame extends Diagram<FrameProps> {
         monthCell.setLineHeight(this.getLineHeight());
         monthCell.setOffset(this.getOffset());
         monthCell.setScale(this.getScale());
+        monthCell.setStartTime(this.getStartTime());
         monthCell.setX(Frame.TABLELEFTWIDTH + this.getX());
         monthCell.setY(this.getY() + this.getLineHeight());
     }

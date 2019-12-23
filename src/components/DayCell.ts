@@ -8,7 +8,7 @@ interface DayCellProps extends DiagramProps {
 export default class DayCell extends Diagram<DayCellProps> {
 
     private readonly _object: fabric.Object[] = [];
-    private _day: number = 5;
+    private _day: number = 6;
     private _startTime: Date = new Date();
 
     constructor(props?: Readonly<DayCellProps>) {
