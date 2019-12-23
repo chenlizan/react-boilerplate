@@ -50,7 +50,7 @@ export default class MonthCell extends Diagram<MonthCellProps> {
         let day = MonthCell.calcMonthDay(startYear, startMonth) - startDay + 1;
         let preScale = 1;
 
-        for (let i = 1; i <= this.getScale(); i++) {
+        for (let i = 0; i <= this.getScale(); i++) {
             if (i === day) {
                 this._object.push(
                     new fabric.Text(year + '.' + (month + 1), this.textStyle(year + '.' + (month + 1), preScale, i))

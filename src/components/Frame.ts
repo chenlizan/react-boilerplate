@@ -1,6 +1,9 @@
 import {fabric} from 'fabric';
 import Diagram, {DiagramProps} from './Diagram';
-
+import CycleCell from './CycleCell';
+import DayCell from './DayCell';
+import MonthCell from './MonthCell';
+import Ruler from './Ruler';
 
 interface FrameProps extends DiagramProps {
     width: number,
@@ -9,30 +12,77 @@ interface FrameProps extends DiagramProps {
 
 export default class Frame extends Diagram<FrameProps> {
 
-    private readonly TABLETITLE: string[] = ['工程标尺', '月', '日', '进度标尺', '星期', '工程周'];
-    private readonly TABLELEFTWIDTH: number = 100;
-    private readonly TABLEBORDERWIDTH: number = 2;
+    private static readonly TABLETITLE: string[] = ['工程标尺', '月', '日', '进度标尺', '星期', '工程周'];
+    private static readonly TABLELEFTWIDTH: number = 100;
+    private static readonly TABLEBORDERWIDTH: number = 2;
 
+    private readonly CANVAS: fabric.Canvas = new fabric.Canvas('canvas');
     private readonly _object: fabric.Object[] = [];
-
     private _width: number = 800;
     private _height: number = 600;
+
+    private _cycleCell: any | undefined;
+    private _dayCell: any | undefined;
+    private _monthCell: any | undefined;
+    private _rulerTop: any | undefined;
+    private _rulerBottom: any | undefined;
 
     constructor(props?: Readonly<FrameProps>) {
         super(props);
         if (props && props.width) {
             this.setWidth(props.width);
             this._width = this.getWidth();
+            this.CANVAS.setWidth(this.getWidth() + Frame.TABLEBORDERWIDTH);
+        } else {
+            this.setWidth(this._width);
+            this.CANVAS.setWidth(this.getWidth() + Frame.TABLEBORDERWIDTH);
         }
-        this._height = props && props.height ? props.height : this._height;
+        if (props && props.height) {
+            this.setHeight(props.height);
+            this._height = this.getHeight();
+            this.CANVAS.setHeight(this.getHeight());
+        } else {
+            this.setHeight(this._height);
+            this.CANVAS.setHeight(this.getHeight());
+        }
+    }
+
+    init(): void {
+        this._cycleCell = new CycleCell();
+        this._dayCell = new DayCell();
+        this._monthCell = new MonthCell();
+        this._rulerTop = new Ruler();
+        this._rulerBottom = new Ruler();
+        this.setCycleCell(this._cycleCell);
+        this.setDayCell(this._dayCell);
+        this.setMonthCell(this._monthCell);
+        this.setRuler(this._rulerTop, 'top');
+        this.setRuler(this._rulerBottom, 'bottom');
+        this.CANVAS.add(...this._cycleCell.generate());
+        this.CANVAS.add(...this._dayCell.generate());
+        this.CANVAS.add(...this._monthCell.generate());
+        this.CANVAS.add(...this._rulerTop.generate());
+        this.CANVAS.add(...this._rulerBottom.generate());
+        this.CANVAS.add(...this.generate());
+
+    }
+
+    reDraw(): void {
+        this.CANVAS.remove(...this._cycleCell.generate());
+        this.CANVAS.remove(...this._dayCell.generate());
+        this.CANVAS.remove(...this._monthCell.generate());
+        this.CANVAS.remove(...this._rulerTop.generate());
+        this.CANVAS.remove(...this._rulerBottom.generate());
+        this.CANVAS.remove(...this.generate());
+        this.init();
     }
 
     getWidth(): number {
-        return this.TABLELEFTWIDTH + this.getScale() * this.getOffset();
+        return Frame.TABLELEFTWIDTH + this.getScale() * this.getOffset();
     }
 
     setWidth(value: number) {
-        this.setScale((value - this.TABLELEFTWIDTH) / this.getOffset());
+        this.setScale((value - Frame.TABLELEFTWIDTH) / this.getOffset());
     }
 
     getHeight(): number {
@@ -43,33 +93,41 @@ export default class Frame extends Diagram<FrameProps> {
         this._height = value;
     }
 
-    setCycleCell(cycleCell: any) {
+    private setCycleCell(cycleCell: any) {
         cycleCell.setLineHeight(this.getLineHeight());
         cycleCell.setOffset(this.getOffset());
         cycleCell.setScale(this.getScale());
-        cycleCell.setX(this.TABLELEFTWIDTH + this.getX());
+        cycleCell.setX(Frame.TABLELEFTWIDTH + this.getX());
         cycleCell.setY(this.getHeight() - this.getY() - this.getLineHeight());
     }
 
-    setMonthCell(monthCell: any) {
+    private setDayCell(dayCell: any) {
+        dayCell.setLineHeight(this.getLineHeight());
+        dayCell.setOffset(this.getOffset());
+        dayCell.setScale(this.getScale());
+        dayCell.setX(Frame.TABLELEFTWIDTH + this.getX());
+        dayCell.setY(this.getY() + this.getLineHeight() * 2);
+    }
+
+    private setMonthCell(monthCell: any) {
         monthCell.setLineHeight(this.getLineHeight());
         monthCell.setOffset(this.getOffset());
         monthCell.setScale(this.getScale());
-        monthCell.setX(this.TABLELEFTWIDTH + this.getX());
+        monthCell.setX(Frame.TABLELEFTWIDTH + this.getX());
         monthCell.setY(this.getY() + this.getLineHeight());
     }
 
-    setRuler(ruler: any, position: 'top' | 'bottom') {
+    private setRuler(ruler: any, position: 'top' | 'bottom') {
         ruler.setLineHeight(this.getLineHeight());
         ruler.setOffset(this.getOffset());
         ruler.setScale(this.getScale());
-        ruler.setX(this.TABLELEFTWIDTH + this.getX());
+        ruler.setX(Frame.TABLELEFTWIDTH + this.getX());
         position === 'top'
             ? ruler.setY(this.getY())
             : ruler.setY(this.getHeight() - this.getY() - this.getLineHeight() * 3);
     }
 
-    textStyle(text: string, index: number) {
+    private textStyle(text: string, index: number) {
         return {
             selectable: false,
             fontSize: this.getFontSize(),
@@ -77,7 +135,7 @@ export default class Frame extends Diagram<FrameProps> {
             shadow: 'rgba(0,0,0,0.3) 5px 5px 5px',
             top: index > 3 ? (this.getHeight() - this.getY() - this.getLineHeight() * 3) + this.getLineHeight() * (index - 4) + ((this.getLineHeight() - this.getFontSize()) / 2)
                 : this.getY() + this.getLineHeight() * (index - 1) + ((this.getLineHeight() - this.getFontSize()) / 2),
-            left: this.getX() + (this.TABLELEFTWIDTH - (this.getFontSize()) * text.length) / 2
+            left: this.getX() + (Frame.TABLELEFTWIDTH - (this.getFontSize()) * text.length) / 2
         }
     }
 
@@ -88,7 +146,7 @@ export default class Frame extends Diagram<FrameProps> {
                     [
                         this.getX(),
                         this.getY() + this.getLineHeight() * (i - 1),
-                        this.getWidth() - this.getX() + this.TABLEBORDERWIDTH,
+                        this.getWidth() - this.getX() + Frame.TABLEBORDERWIDTH,
                         this.getY() + this.getLineHeight() * (i - 1)
                     ],
                     {
@@ -103,7 +161,7 @@ export default class Frame extends Diagram<FrameProps> {
                     [
                         this.getX(),
                         (this.getHeight() - this.getY() - this.getLineHeight() * 3) + this.getLineHeight() * (i - 1),
-                        this.getWidth() - this.getX() + this.TABLEBORDERWIDTH,
+                        this.getWidth() - this.getX() + Frame.TABLEBORDERWIDTH,
                         (this.getHeight() - this.getY() - this.getLineHeight() * 3) + this.getLineHeight() * (i - 1)
                     ],
                     {
@@ -134,9 +192,9 @@ export default class Frame extends Diagram<FrameProps> {
         this._object.push(
             new fabric.Line(
                 [
-                    this.TABLELEFTWIDTH + this.getX(),
+                    Frame.TABLELEFTWIDTH + this.getX(),
                     this.getY(),
-                    this.TABLELEFTWIDTH + this.getX(),
+                    Frame.TABLELEFTWIDTH + this.getX(),
                     this.getHeight() - this.getY()
                 ],
                 {
@@ -150,9 +208,9 @@ export default class Frame extends Diagram<FrameProps> {
         this._object.push(
             new fabric.Line(
                 [
-                    this.getWidth() - this.getX() + this.TABLEBORDERWIDTH,
+                    this.getWidth() - this.getX() + Frame.TABLEBORDERWIDTH,
                     this.getY(),
-                    this.getWidth() - this.getX() + this.TABLEBORDERWIDTH,
+                    this.getWidth() - this.getX() + Frame.TABLEBORDERWIDTH,
                     this.getHeight() - this.getY()
                 ],
                 {
@@ -163,9 +221,9 @@ export default class Frame extends Diagram<FrameProps> {
             )
         );
 
-        for (let i = 1; i <= this.TABLETITLE.length; i++) {
+        for (let i = 1; i <= Frame.TABLETITLE.length; i++) {
             this._object.push(
-                new fabric.Text(this.TABLETITLE[i - 1], this.textStyle(this.TABLETITLE[i - 1], i))
+                new fabric.Text(Frame.TABLETITLE[i - 1], this.textStyle(Frame.TABLETITLE[i - 1], i))
             );
         }
 

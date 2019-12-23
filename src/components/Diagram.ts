@@ -11,7 +11,7 @@ export interface DiagramProps {
     scale?: number
 }
 
-export default class Diagram<P> {
+export default class Diagram<P = any> {
 
     private _x: number = 1;
     private _y: number = 1;
