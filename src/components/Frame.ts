@@ -83,6 +83,7 @@ export default class Frame extends Diagram<FrameProps> {
 
     setWidth(value: number): void {
         this.setScale((value - Frame.TABLELEFTWIDTH) / this.getOffset());
+        this._width = this.getWidth();
     }
 
     getHeight(): number {
@@ -101,7 +102,7 @@ export default class Frame extends Diagram<FrameProps> {
         this._day = value;
     }
 
-    getStartTime() {
+    getStartTime(): Date {
         return this._startTime;
     }
 
@@ -117,7 +118,7 @@ export default class Frame extends Diagram<FrameProps> {
         this._weekCycle = value;
     }
 
-    private setCycleCell(cycleCell: any) {
+    private setCycleCell(cycleCell: any): void {
         cycleCell.setCycle(this.getWeekCycle());
         cycleCell.setLineHeight(this.getLineHeight());
         cycleCell.setOffset(this.getOffset());
@@ -126,7 +127,7 @@ export default class Frame extends Diagram<FrameProps> {
         cycleCell.setY(this.getHeight() - this.getY() - this.getLineHeight());
     }
 
-    private setDayCell(dayCell: any) {
+    private setDayCell(dayCell: any): void {
         dayCell.setDay(this.getDay());
         dayCell.setLineHeight(this.getLineHeight());
         dayCell.setOffset(this.getOffset());
@@ -136,7 +137,7 @@ export default class Frame extends Diagram<FrameProps> {
         dayCell.setY(this.getY() + this.getLineHeight() * 2);
     }
 
-    private setMonthCell(monthCell: any) {
+    private setMonthCell(monthCell: any): void {
         monthCell.setLineHeight(this.getLineHeight());
         monthCell.setOffset(this.getOffset());
         monthCell.setScale(this.getScale());
@@ -145,7 +146,7 @@ export default class Frame extends Diagram<FrameProps> {
         monthCell.setY(this.getY() + this.getLineHeight());
     }
 
-    private setRuler(ruler: any, position: 'top' | 'bottom') {
+    private setRuler(ruler: any, position: 'top' | 'bottom'): void {
         ruler.setLineHeight(this.getLineHeight());
         ruler.setOffset(this.getOffset());
         ruler.setScale(this.getScale());
@@ -155,7 +156,7 @@ export default class Frame extends Diagram<FrameProps> {
             : ruler.setY(this.getHeight() - this.getY() - this.getLineHeight() * 3);
     }
 
-    private textStyle(text: string, index: number) {
+    private textStyle(text: string, index: number): object {
         return {
             selectable: false,
             fontSize: this.getFontSize(),

@@ -2,7 +2,7 @@ import {fabric} from 'fabric';
 import Diagram, {DiagramProps} from './Diagram';
 
 interface CycleCellProps extends DiagramProps {
-
+    cycle?: number
 }
 
 export default class CycleCell extends Diagram<CycleCellProps> {
@@ -14,17 +14,18 @@ export default class CycleCell extends Diagram<CycleCellProps> {
 
     constructor(props?: Readonly<CycleCellProps>) {
         super(props);
+        this._cycle = props && props.cycle ? props.cycle : this._cycle;
     }
 
-    getCycle() {
+    getCycle(): number {
         return this._cycle;
     }
 
-    setCycle(value: number) {
+    setCycle(value: number): void {
         this._cycle = CycleCell.WEEK * value;
     }
 
-    textStyle(text: string, scale: number) {
+    textStyle(text: string, scale: number): object {
         return {
             selectable: false,
             fontSize: this.getFontSize(),

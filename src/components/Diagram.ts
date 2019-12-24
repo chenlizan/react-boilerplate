@@ -35,7 +35,7 @@ export default class Diagram<P = any> {
         return this._x;
     }
 
-    setX(value: number) {
+    setX(value: number): void {
         this._x = value;
     }
 
@@ -43,7 +43,7 @@ export default class Diagram<P = any> {
         return this._y;
     }
 
-    setY(value: number) {
+    setY(value: number): void {
         this._y = value;
     }
 
@@ -51,7 +51,7 @@ export default class Diagram<P = any> {
         return this._color;
     }
 
-    setColor(value: string) {
+    setColor(value: string): void {
         this._color = value;
     }
 
@@ -59,7 +59,7 @@ export default class Diagram<P = any> {
         return this._fontSize;
     }
 
-    setFontSize(value: number) {
+    setFontSize(value: number): void {
         this._fontSize = value;
     }
 
@@ -67,7 +67,7 @@ export default class Diagram<P = any> {
         return this._lineHeight;
     }
 
-    setLineHeight(value: number) {
+    setLineHeight(value: number): void {
         this._lineHeight = value;
     }
 
@@ -75,7 +75,7 @@ export default class Diagram<P = any> {
         return this._offset;
     }
 
-    setOffset(value: number) {
+    setOffset(value: number): void {
         this._offset = value;
     }
 
@@ -83,7 +83,7 @@ export default class Diagram<P = any> {
         return this._scale;
     }
 
-    setScale(value: number) {
+    setScale(value: number): void {
         this._scale = value;
     }
 

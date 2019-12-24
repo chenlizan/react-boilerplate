@@ -17,7 +17,7 @@ export default class Ruler extends Diagram<RulerProps> {
         return this.getLineHeight() / 8;
     }
 
-    textStyle(text: string, scale: number) {
+    textStyle(text: string, scale: number):object {
         return {
             selectable: false,
             fontSize: this.getFontSize(),

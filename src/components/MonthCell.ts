@@ -15,19 +15,19 @@ export default class MonthCell extends Diagram<MonthCellProps> {
         this._startTime = props && props.startTime ? props.startTime : this._startTime;
     }
 
-    getStartTime() {
+    getStartTime(): Date {
         return this._startTime;
     }
 
-    setStartTime(value: Date) {
+    setStartTime(value: Date): void {
         this._startTime = value;
     }
 
-    static calcMonthDay(year: number, month: number) {
+    static calcMonthDay(year: number, month: number): number {
         return new Date(year, month + 1, 0).getDate();
     }
 
-    textStyle(text: string, preScale: number, scale: number) {
+    textStyle(text: string, preScale: number, scale: number): object {
         return {
             selectable: false,
             fontSize: this.getFontSize(),

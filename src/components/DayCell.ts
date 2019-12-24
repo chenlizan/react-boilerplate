@@ -2,7 +2,8 @@ import {fabric} from 'fabric';
 import Diagram, {DiagramProps} from './Diagram';
 
 interface DayCellProps extends DiagramProps {
-
+    day?: number,
+    startTime?: Date
 }
 
 export default class DayCell extends Diagram<DayCellProps> {
@@ -13,13 +14,15 @@ export default class DayCell extends Diagram<DayCellProps> {
 
     constructor(props?: Readonly<DayCellProps>) {
         super(props);
+        this._day = props && props.day ? props.day : this._day;
+        this._startTime = props && props.startTime ? props.startTime : this._startTime;
     }
 
     getDay(): number {
         return this._day;
     }
 
-    setDay(value: number) {
+    setDay(value: number): void {
         this._day = value;
     }
 
@@ -27,7 +30,7 @@ export default class DayCell extends Diagram<DayCellProps> {
         return this._startTime;
     }
 
-    setStartTime(value: Date) {
+    setStartTime(value: Date): void {
         this._startTime = value;
     }
 
