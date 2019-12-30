@@ -1,5 +1,5 @@
 import {fabric} from 'fabric';
-import Diagram, {DiagramProps} from './Diagram';
+import Diagram, {DiagramProps} from '../Diagram';
 
 interface DayCellProps extends DiagramProps {
     day?: number,

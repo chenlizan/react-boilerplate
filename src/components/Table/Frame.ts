@@ -1,9 +1,13 @@
 import {fabric} from 'fabric';
-import Diagram, {DiagramProps} from './Diagram';
+import Diagram, {DiagramProps} from '../Diagram';
 import CycleCell from './CycleCell';
 import DayCell from './DayCell';
 import MonthCell from './MonthCell';
 import Ruler from './Ruler';
+import TurnPoint from "../AOA/TurnPoint";
+import Task from '../AOA/Task';
+
+import testData from '../../views/testData.json';
 
 interface FrameProps extends DiagramProps {
     width: number,
@@ -67,6 +71,10 @@ export default class Frame extends Diagram<FrameProps> {
         this.CANVAS.add(...this._rulerTop.generate());
         this.CANVAS.add(...this._rulerBottom.generate());
         this.CANVAS.add(...this.generate());
+
+        const task = new Task({data: testData});
+
+        this.CANVAS.add(...task.generate());
     }
 
     reDraw(): void {

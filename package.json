@@ -30,6 +30,7 @@
     "@babel/preset-react": "^7.7.4",
     "@babel/preset-typescript": "^7.7.4",
     "@types/fabric": "^3.5.0",
+    "@types/lodash": "^4.14.149",
     "@types/prop-types": "^15.7.3",
     "@types/react": "^16.9.16",
     "@types/react-dom": "^16.9.4",

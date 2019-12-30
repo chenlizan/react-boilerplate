@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {Input} from 'antd';
-import Frame from '../components/Frame';
+import Frame from '../components/Table/Frame';
+import styles from './FabricView.less';
 
 const {Search} = Input;
 
@@ -14,6 +15,7 @@ export default class FabricView extends React.Component {
 
     componentDidMount() {
         this.frame = new Frame();
+        this.frame.setStartTime(new Date('2019-3-1'));
         this.frame.init();
     }
 
@@ -43,7 +45,7 @@ export default class FabricView extends React.Component {
 
     render() {
         return (
-            <div style={{width: 1920}}>
+            <div className={styles.FabricView}>
                 <h2>请输入一个正整数，宽度和工程总周期是互相制约关系</h2>
                 <Search
                     style={{width: 160, marginRight: 5}}
@@ -88,6 +90,7 @@ export default class FabricView extends React.Component {
                     onSearch={this.handleFun.bind(null, 'scale')}
                 />
                 <canvas id='canvas'/>
+                <h3>Power by 用友建筑 陈礼赞</h3>
             </div>
         )
     }
