@@ -5,13 +5,12 @@ import TurnPoint from './TurnPoint';
 import TurnLine from './TaskLine';
 
 
-export interface TaskProps extends DiagramProps {
+interface TaskProps extends DiagramProps {
     data: Array<TaskDataProps>
 }
 
 export default class Task extends Diagram<TaskProps> {
 
-    private readonly _object: fabric.Object[] = [];
     private _data: Array<TaskDataProps> = [];
 
     private _turnPoint: any | undefined;
@@ -19,9 +18,7 @@ export default class Task extends Diagram<TaskProps> {
 
     constructor(props?: Readonly<TaskProps>) {
         super(props);
-        if (props && props.data) {
-            this.setData(props.data);
-        }
+        this._data = props && props.data ? props.data : this._data;
     }
 
     getData(): Array<TaskDataProps> {
@@ -30,11 +27,23 @@ export default class Task extends Diagram<TaskProps> {
 
     setData(value: Array<TaskDataProps>): void {
         this._data = value;
-        this._turnPoint = new TurnPoint({data: value});
-        this._turnLine = new TurnLine({data: value});
     }
 
     generate(): fabric.Object[] {
+        this._turnPoint = new TurnPoint();
+        this._turnPoint.setLineHeight(this.getLineHeight());
+        this._turnPoint.setOffset(this.getOffset());
+        this._turnPoint.setScale(this.getScale());
+        this._turnPoint.setX(this.getX());
+        this._turnPoint.setY(this.getY());
+        this._turnPoint.setData(this.getData());
+        this._turnLine = new TurnLine();
+        this._turnLine.setLineHeight(this.getLineHeight());
+        this._turnLine.setOffset(this.getOffset());
+        this._turnLine.setScale(this.getScale());
+        this._turnLine.setX(this.getX());
+        this._turnLine.setY(this.getY());
+        this._turnLine.setData(this.getData());
         return [...this._turnLine.generate(), ...this._turnPoint.generate()];
     }
 }

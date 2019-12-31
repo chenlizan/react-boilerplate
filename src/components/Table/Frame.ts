@@ -4,10 +4,8 @@ import CycleCell from './CycleCell';
 import DayCell from './DayCell';
 import MonthCell from './MonthCell';
 import Ruler from './Ruler';
-import TurnPoint from "../AOA/TurnPoint";
 import Task from '../AOA/Task';
 
-import testData from '../../views/testData.json';
 
 interface FrameProps extends DiagramProps {
     width: number,
@@ -27,12 +25,14 @@ export default class Frame extends Diagram<FrameProps> {
     private _day: number = 6;
     private _startTime: Date = new Date();
     private _weekCycle: number = 2;
+    private _data: Array<any> = [];
 
     private _cycleCell: any | undefined;
     private _dayCell: any | undefined;
     private _monthCell: any | undefined;
-    private _rulerTop: any | undefined;
-    private _rulerBottom: any | undefined;
+    private _rulerTopCell: any | undefined;
+    private _rulerBottomCell: any | undefined;
+    private _taskCell: any | undefined;
 
     constructor(props?: Readonly<FrameProps>) {
         super(props);
@@ -58,23 +58,22 @@ export default class Frame extends Diagram<FrameProps> {
         this._cycleCell = new CycleCell();
         this._dayCell = new DayCell();
         this._monthCell = new MonthCell();
-        this._rulerTop = new Ruler();
-        this._rulerBottom = new Ruler();
+        this._rulerTopCell = new Ruler();
+        this._rulerBottomCell = new Ruler();
+        this._taskCell = new Task({data: this.getData()});
         this.setCycleCell(this._cycleCell);
         this.setDayCell(this._dayCell);
         this.setMonthCell(this._monthCell);
-        this.setRuler(this._rulerTop, 'top');
-        this.setRuler(this._rulerBottom, 'bottom');
+        this.setRuler(this._rulerTopCell, 'top');
+        this.setRuler(this._rulerBottomCell, 'bottom');
+        this.setTask(this._taskCell);
         this.CANVAS.add(...this._cycleCell.generate());
         this.CANVAS.add(...this._dayCell.generate());
         this.CANVAS.add(...this._monthCell.generate());
-        this.CANVAS.add(...this._rulerTop.generate());
-        this.CANVAS.add(...this._rulerBottom.generate());
+        this.CANVAS.add(...this._rulerTopCell.generate());
+        this.CANVAS.add(...this._rulerBottomCell.generate());
+        this.CANVAS.add(...this._taskCell.generate());
         this.CANVAS.add(...this.generate());
-
-        const task = new Task({data: testData});
-
-        this.CANVAS.add(...task.generate());
     }
 
     reDraw(): void {
@@ -126,6 +125,14 @@ export default class Frame extends Diagram<FrameProps> {
         this._weekCycle = value;
     }
 
+    getData(): Array<any> {
+        return this._data;
+    }
+
+    setData(value: Array<any>) {
+        this._data = value;
+    }
+
     private setCycleCell(cycleCell: any): void {
         cycleCell.setCycle(this.getWeekCycle());
         cycleCell.setLineHeight(this.getLineHeight());
@@ -162,6 +169,15 @@ export default class Frame extends Diagram<FrameProps> {
         position === 'top'
             ? ruler.setY(this.getY())
             : ruler.setY(this.getHeight() - this.getY() - this.getLineHeight() * 3);
+    }
+
+    private setTask(task: any): void {
+        task.setLineHeight(this.getLineHeight());
+        task.setOffset(this.getOffset());
+        task.setScale(this.getScale());
+        task.setX(Frame.TABLELEFTWIDTH + this.getX());
+        task.setY(this.getHeight() - this.getY() - this.getLineHeight());
+        task.setData(this.getData());
     }
 
     private textStyle(text: string, index: number): object {

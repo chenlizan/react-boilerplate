@@ -3,6 +3,8 @@ import {Input} from 'antd';
 import Frame from '../components/Table/Frame';
 import styles from './FabricView.less';
 
+import testData from './testData.json';
+
 const {Search} = Input;
 
 export default class FabricView extends React.Component {
@@ -16,6 +18,7 @@ export default class FabricView extends React.Component {
     componentDidMount() {
         this.frame = new Frame();
         this.frame.setStartTime(new Date('2019-3-1'));
+        this.frame.setData(testData);
         this.frame.init();
     }
 
@@ -90,7 +93,8 @@ export default class FabricView extends React.Component {
                     onSearch={this.handleFun.bind(null, 'scale')}
                 />
                 <canvas id='canvas'/>
-                <h3>Power by 用友建筑 陈礼赞</h3>
+                <h3>Power by <a href="http://fabricjs.com/">Fabric.js</a></h3>
+                <h5>Design 陈礼赞</h5>
             </div>
         )
     }

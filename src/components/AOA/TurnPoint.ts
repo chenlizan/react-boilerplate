@@ -4,6 +4,7 @@ import {TaskDataProps} from './TaskObject';
 import {getDiff, getTaskInfo, getTurnPoints} from '../Utils';
 import * as moment from "moment";
 
+
 interface TurnPointProps extends DiagramProps {
     data: Array<TaskDataProps>
 }
@@ -59,6 +60,19 @@ export default class TurnPoint extends Diagram<TurnPointProps> {
                     hasBorders: false
                 })
             );
+            if (i !== 0) {
+                this._object.push(
+                    new fabric.Triangle({
+                        width: this.getOffset() * 2,
+                        height: this.getOffset(),
+                        fill: 'red',
+                        angle: 90,
+                        left: 100 - this.getOffset() + getDiff(turnPointsArr[0], turnPointsArr[i]) * this.getOffset() + 1,
+                        top: this.getLineHeight() * 3 + <number>topValue + 1,
+                    })
+                );
+            }
+
         }
 
         return this._object;

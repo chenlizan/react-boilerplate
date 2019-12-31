@@ -5,10 +5,9 @@ import {getDiff, getTaskInfo, getTurnPoints} from '../Utils';
 import * as moment from "moment";
 
 
-interface TaskLineProps extends DiagramProps {
+interface TaskLineProps extends DiagramProps{
     data: Array<TaskDataProps>
 }
-
 
 export default class TaskLine extends Diagram<TaskLineProps> {
 
