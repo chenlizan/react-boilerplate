@@ -17,14 +17,14 @@ export default class Ruler extends Diagram<RulerProps> {
         return this.getLineHeight() / 8;
     }
 
-    textStyle(text: string, scale: number):object {
+    textStyle(text: string, scale: number): object {
         return {
-            selectable: false,
-            fontSize: this.getFontSize(),
-            shadow: 'rgba(0,0,0,0.3) 5px 5px 5px',
             top: this.getY() + (this.getHeight() * 7 - this.getFontSize()) / 2,
             left: this.getX() + this.getOffset() * scale - (text.length > 1 ? this.getFontSize() * text.length / 4 : 0),
-            opacity: this.getOffset() * scale + this.getFontSize() / 2 * text.length < this.getOffset() * this.getScale() ? 1 : 0
+            fontSize: this.getFontSize(),
+            shadow: 'rgba(0,0,0,0.3) 5px 5px 5px',
+            opacity: this.getOffset() * scale + this.getFontSize() / 2 * text.length < this.getOffset() * this.getScale() ? 1 : 0,
+            selectable: false
         }
     }
 

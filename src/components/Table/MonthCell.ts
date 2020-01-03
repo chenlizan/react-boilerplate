@@ -2,25 +2,14 @@ import {fabric} from 'fabric';
 import Diagram, {DiagramProps} from '../Diagram';
 
 interface MonthCellProps extends DiagramProps {
-    startTime?: Date
 }
 
 export default class MonthCell extends Diagram<MonthCellProps> {
 
     private readonly _object: fabric.Object[] = [];
-    private _startTime: Date = new Date();
 
     constructor(props?: Readonly<MonthCellProps>) {
         super(props);
-        this._startTime = props && props.startTime ? props.startTime : this._startTime;
-    }
-
-    getStartTime(): Date {
-        return this._startTime;
-    }
-
-    setStartTime(value: Date): void {
-        this._startTime = value;
     }
 
     static calcMonthDay(year: number, month: number): number {
@@ -29,21 +18,21 @@ export default class MonthCell extends Diagram<MonthCellProps> {
 
     textStyle(text: string, preScale: number, scale: number): object {
         return {
-            selectable: false,
-            fontSize: this.getFontSize(),
-            fontWeight: 'bold',
-            shadow: 'rgba(0,0,0,0.3) 5px 5px 5px',
             top: this.getY() + ((this.getLineHeight() - this.getFontSize()) / 2),
             left: this.getX() + this.getOffset() * preScale
                 + ((scale - preScale) * this.getOffset() - (this.getFontSize() / 2) * (text.length - 0.5)) / 2,
-            opacity: this.getFontSize() / 2 * text.length < (scale - preScale) * this.getOffset() ? 1 : 0
+            fontSize: this.getFontSize(),
+            fontWeight: 'bold',
+            opacity: this.getFontSize() / 2 * text.length < (scale - preScale) * this.getOffset() ? 1 : 0,
+            shadow: 'rgba(0,0,0,0.3) 5px 5px 5px',
+            selectable: false,
         }
     }
 
     generate(): fabric.Object[] {
-        const startYear = this._startTime.getFullYear();
-        const startMonth = this._startTime.getMonth();
-        const startDay = this._startTime.getDate();
+        const startYear = this.getStartTime().getFullYear();
+        const startMonth = this.getStartTime().getMonth();
+        const startDay = this.getStartTime().getDate();
 
         let year = startYear;
         let month = startMonth;

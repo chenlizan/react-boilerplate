@@ -31,19 +31,21 @@ export default class Task extends Diagram<TaskProps> {
 
     generate(): fabric.Object[] {
         this._turnPoint = new TurnPoint();
+        this._turnPoint.setX(this.getX());
+        this._turnPoint.setY(this.getY());
         this._turnPoint.setLineHeight(this.getLineHeight());
         this._turnPoint.setOffset(this.getOffset());
         this._turnPoint.setScale(this.getScale());
-        this._turnPoint.setX(this.getX());
-        this._turnPoint.setY(this.getY());
+        this._turnPoint.setStartTime(this.getStartTime());
         this._turnPoint.setData(this.getData());
         this._turnLine = new TurnLine();
+        this._turnLine.setX(this.getX());
+        this._turnLine.setY(this.getY());
         this._turnLine.setLineHeight(this.getLineHeight());
         this._turnLine.setOffset(this.getOffset());
         this._turnLine.setScale(this.getScale());
-        this._turnLine.setX(this.getX());
-        this._turnLine.setY(this.getY());
+        this._turnLine.setStartTime(this.getStartTime());
         this._turnLine.setData(this.getData());
-        return [...this._turnLine.generate(), ...this._turnPoint.generate()];
+        return [...this._turnLine.generate() , ...this._turnPoint.generate()];
     }
 }

@@ -27,12 +27,12 @@ export default class CycleCell extends Diagram<CycleCellProps> {
 
     textStyle(text: string, scale: number): object {
         return {
-            selectable: false,
-            fontSize: this.getFontSize(),
-            shadow: 'rgba(0,0,0,0.3) 5px 5px 5px',
             top: this.getY() + (this.getLineHeight() - this.getFontSize()) / 2,
             left: this.getX() + this.getOffset() * (scale - this.getCycle()) + (this.getCycle() * this.getOffset() - this.getFontSize() / 2 * text.length) / 2,
-            opacity: this.getFontSize() / 2 * text.length < this.getCycle() * this.getOffset() ? 1 : 0
+            opacity: this.getFontSize() / 2 * text.length < this.getCycle() * this.getOffset() ? 1 : 0,
+            fontSize: this.getFontSize(),
+            shadow: 'rgba(0,0,0,0.3) 5px 5px 5px',
+            selectable: false
         }
     }
 

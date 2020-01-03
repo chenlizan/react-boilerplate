@@ -3,19 +3,19 @@ import Diagram, {DiagramProps} from '../Diagram';
 
 interface DayCellProps extends DiagramProps {
     day?: number,
-    startTime?: Date
+    height: number
 }
 
 export default class DayCell extends Diagram<DayCellProps> {
 
     private readonly _object: fabric.Object[] = [];
     private _day: number = 6;
-    private _startTime: Date = new Date();
+    private _height: number = 600;
 
     constructor(props?: Readonly<DayCellProps>) {
         super(props);
         this._day = props && props.day ? props.day : this._day;
-        this._startTime = props && props.startTime ? props.startTime : this._startTime;
+        this._height = props && props.height ? props.height : this._height;
     }
 
     getDay(): number {
@@ -26,22 +26,22 @@ export default class DayCell extends Diagram<DayCellProps> {
         this._day = value;
     }
 
-    getStartTime(): Date {
-        return this._startTime;
+    getHeight(): number {
+        return this._height;
     }
 
-    setStartTime(value: Date): void {
-        this._startTime = value;
+    setHeight(value: number): void {
+        this._height = value;
     }
 
-    textStyle(text: string, scale: number): Object {
+    textStyle(text: string, scale: number): object {
         return {
-            selectable: false,
-            fontSize: this.getFontSize(),
-            shadow: 'rgba(0,0,0,0.3) 5px 5px 5px',
             top: this.getY() + (this.getLineHeight() - this.getFontSize()) / 2,
             left: this.getX() + this.getOffset() * (scale - this.getDay()) + (this.getDay() * this.getOffset() - this.getFontSize() / 2 * text.length) / 2,
-            opacity: this.getFontSize() / 2 * text.length < this.getDay() * this.getOffset() ? 1 : 0
+            fontSize: this.getFontSize(),
+            opacity: this.getFontSize() / 2 * text.length < this.getDay() * this.getOffset() ? 1 : 0,
+            shadow: 'rgba(0,0,0,0.3) 5px 5px 5px',
+            selectable: false,
         }
     }
 
@@ -68,11 +68,25 @@ export default class DayCell extends Diagram<DayCellProps> {
                         ], {
                             selectable: false,
                             stroke: this.getColor(),
-                            strokeWidth: 1
+                            strokeWidth: 1,
                         }
                     )
                 );
-
+                this._object.push(
+                    new fabric.Line(
+                        [
+                            this.getX() + this.getOffset() * i,
+                            this.getY() + this.getLineHeight(),
+                            this.getX() + this.getOffset() * i,
+                            this.getY() + this.getHeight() - this.getLineHeight() * 4
+                        ], {
+                            selectable: false,
+                            stroke: this.getColor(),
+                            strokeWidth: 1,
+                            strokeDashArray: [3, 3]
+                        }
+                    )
+                );
             }
 
         }

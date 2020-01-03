@@ -9,6 +9,7 @@ export interface DiagramProps {
     lineHeight?: number,
     offset?: number,
     scale?: number
+    startTime?: Date
 }
 
 export default class Diagram<P = any> {
@@ -20,6 +21,7 @@ export default class Diagram<P = any> {
     private _lineHeight: number = 40;
     private _offset: number = 5;
     private _scale: number = 30;
+    private _startTime: Date = new Date();
 
     constructor(props?: Readonly<P> | any) {
         this._x = props && props.x ? props.x : this._x;
@@ -29,6 +31,7 @@ export default class Diagram<P = any> {
         this._lineHeight = props && props.lineHeight ? props.lineHeight : this._lineHeight;
         this._offset = props && props.offset ? props.offset : this._offset;
         this._scale = props && props.scale ? props.scale : this._scale;
+        this._startTime = props && props.startTime ? props.startTime : this._startTime;
     };
 
     getX(): number {
@@ -85,6 +88,14 @@ export default class Diagram<P = any> {
 
     setScale(value: number): void {
         this._scale = value;
+    }
+
+    getStartTime(): Date {
+        return this._startTime;
+    }
+
+    setStartTime(value: Date): void {
+        this._startTime = value;
     }
 
     generate(): fabric.Object[] {

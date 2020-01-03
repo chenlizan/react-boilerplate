@@ -50,31 +50,28 @@ export default class TurnPoint extends Diagram<TurnPointProps> {
             const topValue = startDate ? startDate.top : endDate.top;
             this._object.push(
                 new fabric.Circle({
-                    left: 100 - this.getOffset() + getDiff(turnPointsArr[0], turnPointsArr[i]) * this.getOffset(),
+                    left: this.getX() - this.getOffset() + getDiff(this.getStartTime(), turnPointsArr[i]) * this.getOffset(),
                     top: this.getLineHeight() * 3 + <number>topValue,
-                    // strokeWidth: 1,
-                    radius: this.getOffset(),
                     fill: 'white',
+                    radius: this.getOffset(),
                     stroke: 'red',
-                    hasControls: false,
-                    hasBorders: false
+                    selectable: false
                 })
             );
             if (i !== 0) {
                 this._object.push(
                     new fabric.Triangle({
+                        left: this.getX() - this.getOffset() + getDiff(this.getStartTime(), turnPointsArr[i]) * this.getOffset() + 1,
+                        top: this.getLineHeight() * 3 + <number>topValue + 1,
                         width: this.getOffset() * 2,
                         height: this.getOffset(),
-                        fill: 'red',
                         angle: 90,
-                        left: 100 - this.getOffset() + getDiff(turnPointsArr[0], turnPointsArr[i]) * this.getOffset() + 1,
-                        top: this.getLineHeight() * 3 + <number>topValue + 1,
+                        fill: 'red',
+                        selectable: false
                     })
                 );
             }
-
         }
-
         return this._object;
     }
 
