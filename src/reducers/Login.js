@@ -2,23 +2,29 @@
  * Created by chenlizan on 2017/7/22.
  */
 
-import {handleActions} from "redux-actions"
+import { handleActions } from "redux-actions";
 
 const initState = {
-    account: {},
-    result: ''
+  account: {},
+  result: "",
 };
 
-const reducer = handleActions({
+const reducer = handleActions(
+  {
     LOGIN_REQUESTED: (state, action) => ({
-        ...state, account: action.payload
+      ...state,
+      account: action.payload,
     }),
     LOGIN_SUCCEEDED: (state, action) => ({
-        ...state, result: action.payload
+      ...state,
+      result: action.payload,
     }),
     LOGIN_FAILED: (state, action) => ({
-        ...state, result: action.payload
+      ...state,
+      result: action.payload,
     }),
-}, initState);
+  },
+  initState
+);
 
-export default {initState, reducer};
+export default { initState, reducer };

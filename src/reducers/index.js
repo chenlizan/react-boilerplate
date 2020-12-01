@@ -5,9 +5,9 @@
 import Login from "./Login";
 
 export const initState = {
-    Login: Login.initState
+  Login: Login.initState,
 };
 
 export const reducers = {
-    Login: Login.reducer
+  Login: Login.reducer,
 };

@@ -1,22 +1,17 @@
 {
   "extends": [
-    "stylelint-config-recommended",
-    "stylelint-config-standard"
+    "stylelint-config-standard",
+    "stylelint-config-css-modules",
+    "stylelint-config-rational-order",
+    "stylelint-config-prettier"
   ],
   "plugins": [
-    "stylelint-order",
-    "stylelint-config-rational-order/plugin"
+    "stylelint-order"
   ],
   "rules": {
-    "order/order": [
-      "custom-properties",
-      "dollar-variables",
-      "at-variables",
-      "declarations",
-      "rules",
-      "at-rules",
-      "less-mixins"
-    ],
-    "plugin/rational-order": true
+    "block-no-empty": null,
+    "no-empty-source": null,
+    "no-descending-specificity": null,
+    "font-family-no-missing-generic-family-keyword": null
   }
 }
