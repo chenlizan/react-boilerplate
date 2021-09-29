@@ -9,11 +9,12 @@
     "project": "./tsconfig.json"
   },
   "plugins": [
+    "@typescript-eslint",
     "prettier",
-    "@typescript-eslint"
+    "react-hooks"
   ],
   "rules": {
-    "max-len": ["error", 160],
+    "max-len": ["warn", 120],
     "prettier/prettier": "error"
   }
 }
