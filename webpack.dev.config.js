@@ -2,7 +2,6 @@ const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const HtmlWebpackIncludeAssetsPlugin = require("html-webpack-include-assets-plugin");
-const OpenBrowserPlugin = require("open-browser-webpack-plugin");
 const ProgressBarPlugin = require("progress-bar-webpack-plugin");
 const getCSSModuleLocalIdent = require("react-dev-utils/getCSSModuleLocalIdent");
 const StylelintPlugin = require("stylelint-webpack-plugin");
@@ -12,6 +11,7 @@ const PORT = 4000;
 const clientConfig = {
   mode: "development",
   devServer: {
+    open: true,
     port: PORT,
     historyApiFallback: true,
   },
@@ -34,6 +34,8 @@ const clientConfig = {
               plugins: [
                 ["@babel/plugin-proposal-decorators", { legacy: true }],
                 ["@babel/plugin-proposal-class-properties", { loose: true }],
+                ["@babel/plugin-proposal-private-methods", { loose: true }],
+                ["@babel/plugin-proposal-private-property-in-object", { loose: true }],
                 ["import", { libraryName: "antd", style: "css" }, "ant"],
                 ["import", { libraryName: "antd-mobile", style: "css" }, "ant-mobile"],
                 ["lodash"],
@@ -141,7 +143,6 @@ const clientConfig = {
     new HtmlWebpackIncludeAssetsPlugin({ assets: ["../dll/vendor.dll.js"], append: false }),
     new StylelintPlugin({ configFile: ".stylelintrc", files: "**/*.(c|le)ss", fix: true }),
     new webpack.HotModuleReplacementPlugin(),
-    new OpenBrowserPlugin({ url: `http://localhost:${PORT}`, browser: "chrome" }),
     new ProgressBarPlugin(),
   ],
   node: {

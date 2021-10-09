@@ -69,6 +69,8 @@ const clientConfig = {
               plugins: [
                 ["@babel/plugin-proposal-decorators", { legacy: true }],
                 ["@babel/plugin-proposal-class-properties", { loose: true }],
+                ["@babel/plugin-proposal-private-methods", { loose: true }],
+                ["@babel/plugin-proposal-private-property-in-object", { loose: true }],
                 ["import", { libraryName: "antd", style: "css" }, "ant"],
                 ["import", { libraryName: "antd-mobile", style: "css" }, "ant-mobile"],
                 ["lodash"],
