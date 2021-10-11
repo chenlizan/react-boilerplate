@@ -23,6 +23,12 @@ const reducer = handleActions(
       ...state,
       result: action.payload,
     }),
+    RECEIVE: (state, action) => {
+      return {
+        ...state,
+        receive: action.payload,
+      };
+    },
   },
   initState
 );

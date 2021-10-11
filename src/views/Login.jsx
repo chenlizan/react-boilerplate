@@ -28,15 +28,17 @@ class LoginForm extends React.Component {
   getChildContext() {}
 
   componentDidUpdate() {
-    const { result } = this.props;
-    void (result ? this.info(result) : "");
+    const { result, secs } = this.props;
+    // void (result ? this.info(result) : "");
+    void (secs ? this.info(secs) : "");
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        this.props.handleLoginRequested(values);
+        // this.props.handleLoginRequested(values);
+        this.props.handleStartListener();
         console.log("Received values of form: ", values);
       }
     });
