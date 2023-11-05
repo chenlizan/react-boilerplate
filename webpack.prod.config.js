@@ -116,8 +116,16 @@ const clientConfig = {
           {
             loader: require.resolve("postcss-loader"),
             options: {
-              ident: "postcss",
-              plugins: [require("postcss-flexbugs-fixes"), require("autoprefixer")({ flexbox: "no-2009" })],
+              postcssOptions: {
+                plugins: [
+                  [
+                    "postcss-preset-env",
+                    {
+                      // Options
+                    },
+                  ],
+                ],
+              },
             },
           },
         ],
@@ -163,8 +171,16 @@ const clientConfig = {
           {
             loader: require.resolve("postcss-loader"),
             options: {
-              ident: "postcss",
-              plugins: [require("postcss-flexbugs-fixes"), require("autoprefixer")({ flexbox: "no-2009" })],
+              postcssOptions: {
+                plugins: [
+                  [
+                    "postcss-preset-env",
+                    {
+                      // Options
+                    },
+                  ],
+                ],
+              },
             },
           },
           {
