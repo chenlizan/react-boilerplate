@@ -1,4 +1,4 @@
-.login_form {
+.login-form {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -6,10 +6,10 @@
   margin: -150px 0 0 -150px;
 }
 
-.login_form_forgot {
+.login-form-forgot {
   float: right;
 }
 
-.login_form_button {
+.login-form-button {
   width: 100%;
 }

@@ -1,61 +1,22 @@
-const isWsl = require("is-wsl");
 const path = require("path");
 const webpack = require("webpack");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const AddAssetHtmlPlugin = require("add-asset-html-webpack-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-const safePostCssParser = require("postcss-safe-parser");
 const ProgressBarPlugin = require("progress-bar-webpack-plugin");
-const getCSSModuleLocalIdent = require("react-dev-utils/getCSSModuleLocalIdent");
+const StylelintPlugin = require("stylelint-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
-const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
 const clientConfig = {
   mode: "production",
   entry: ["@babel/polyfill", path.resolve(__dirname, "src/index")],
   output: {
-    path: path.resolve(__dirname, "dist"),
-    chunkFilename: "chunk.[chunkhash:5].js",
-    filename: "[name].js",
+    chunkFilename: "chunk.[contenthash:8].js",
+    filename: "[name].[contenthash:8].js",
     publicPath: "./",
-  },
-  optimization: {
-    minimizer: [
-      new TerserPlugin({
-        terserOptions: {
-          parse: {
-            ecma: 8,
-          },
-          compress: {
-            ecma: 5,
-            warnings: false,
-            comparisons: false,
-            inline: 2,
-          },
-          mangle: {
-            safari10: true,
-          },
-          output: {
-            ecma: 5,
-            comments: false,
-            ascii_only: true,
-          },
-        },
-        parallel: !isWsl,
-        cache: true,
-        sourceMap: false,
-      }),
-      new OptimizeCSSAssetsPlugin({
-        cssProcessorOptions: {
-          parser: safePostCssParser,
-        },
-      }),
-    ],
-    splitChunks: {
-      chunks: "all",
-    },
-    runtimeChunk: true,
+    path: path.resolve(__dirname, "dist"),
+    clean: true,
   },
   module: {
     rules: [
@@ -81,132 +42,64 @@ const clientConfig = {
       },
       {
         test: /\.(png|jpg|gif)$/,
-        use: [
-          {
-            loader: "file-loader",
-            options: { limit: 8192 },
+        type: "asset/resource",
+        generator: {
+          filename: "images/[name].[hash:8][ext]",
+        },
+        parser: {
+          dataUrlCondition: {
+            maxSize: 8192,
           },
-        ],
+        },
       },
       {
         test: /\.(eot|svg|ttf|woff|woff2)(\?\S*)?$/,
-        use: [{ loader: "file-loader" }],
+        type: "asset/resource",
+        generator: {
+          filename: "fonts/[name].[hash:8][ext]",
+        },
       },
       {
         test: /\.css$/,
-        exclude: [path.resolve(__dirname, "node_modules"), path.resolve(__dirname, "src/assets")],
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              publicPath: (resourcePath, context) => {
-                return path.relative(path.dirname(resourcePath), context) + "../../";
-              },
-            },
-          },
-          {
-            loader: "css-loader",
-            options: {
-              importLoaders: 1,
-              modules: {
-                getLocalIdent: getCSSModuleLocalIdent,
-              },
-            },
-          },
-          {
-            loader: require.resolve("postcss-loader"),
-            options: {
-              postcssOptions: {
-                plugins: [
-                  [
-                    "postcss-preset-env",
-                    {
-                      // Options
-                    },
-                  ],
-                ],
-              },
-            },
-          },
-        ],
-      },
-      {
-        test: /\.css$/,
-        include: [path.resolve(__dirname, "node_modules"), path.resolve(__dirname, "src/assets")],
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              publicPath: (resourcePath, context) => {
-                return path.relative(path.dirname(resourcePath), context) + "../../";
-              },
-            },
-          },
-          {
-            loader: "css-loader",
-          },
-        ],
+        use: [MiniCssExtractPlugin.loader, "css-loader"],
       },
       {
         test: /\.less$/,
-        exclude: [path.resolve(__dirname, "node_modules"), path.resolve(__dirname, "src/assets")],
+        exclude: /\.module\.less$/,
         use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              publicPath: (resourcePath, context) => {
-                return path.relative(path.dirname(resourcePath), context) + "../../";
-              },
-            },
-          },
-          {
-            loader: "css-loader",
-            options: {
-              importLoaders: 2,
-              modules: {
-                getLocalIdent: getCSSModuleLocalIdent,
-              },
-            },
-          },
-          {
-            loader: require.resolve("postcss-loader"),
-            options: {
-              postcssOptions: {
-                plugins: [
-                  [
-                    "postcss-preset-env",
-                    {
-                      // Options
-                    },
-                  ],
-                ],
-              },
-            },
-          },
+          MiniCssExtractPlugin.loader,
+          "css-loader",
           {
             loader: "less-loader",
-            options: { javascriptEnabled: true },
+            options: {
+              lessOptions: {
+                javascriptEnabled: true,
+              },
+            },
           },
         ],
       },
       {
-        test: /\.less/,
-        include: [path.resolve(__dirname, "node_modules"), path.resolve(__dirname, "src/assets")],
+        test: /\.module\.less$/,
         use: [
+          MiniCssExtractPlugin.loader,
           {
-            loader: MiniCssExtractPlugin.loader,
+            loader: "css-loader",
             options: {
-              publicPath: (resourcePath, context) => {
-                return path.relative(path.dirname(resourcePath), context) + "../../";
+              modules: {
+                mode: "local",
+                namedExport: false,
+                exportLocalsConvention: "camelCase",
+                localIdentName: "[hash:base64:8]",
               },
+              esModule: true,
             },
           },
           {
-            loader: "css-loader",
-          },
-          {
             loader: "less-loader",
-            options: { javascriptEnabled: true },
+            options: {
+              lessOptions: { javascriptEnabled: true },
+            },
           },
         ],
       },
@@ -214,37 +107,103 @@ const clientConfig = {
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".json", ".jsx"],
+    fallback: {
+      dgram: false,
+      dns: false,
+      fs: false,
+      http2: false,
+      net: false,
+      tls: false,
+      child_process: false,
+    },
   },
   plugins: [
     new webpack.DefinePlugin({
-      "process.env": { NODE_ENV: JSON.stringify("production") },
+      "process.env.NODE_ENV": JSON.stringify("production"),
     }),
-    new CleanWebpackPlugin(),
+    new webpack.DllReferencePlugin({
+      context: __dirname,
+      manifest: require("./dll/vendor-manifest.json"),
+      name: "vendor_dll",
+    }),
+    new AddAssetHtmlPlugin({
+      filepath: path.resolve(__dirname, "dll/vendor.dll.js"),
+      publicPath: "./",
+      outputPath: "",
+      typeOfAsset: "js",
+      attributes: { defer: false },
+    }),
     new HtmlWebpackPlugin({
-      filename: "index.html",
       template: "public/index.html",
-      minify: false,
+      filename: "index.html",
+      inject: true,
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeRedundantAttributes: true,
+        useShortDoctype: true,
+        removeEmptyAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        keepClosingSlash: true,
+        minifyJS: true,
+        minifyCSS: true,
+        minifyURLs: true,
+      },
     }),
     new MiniCssExtractPlugin({
-      filename: "static/css/[name].css",
-      chunkFilename: "static/css/[name].[chunkhash:5].chunk.css",
-    }),
-    new BundleAnalyzerPlugin({
-      analyzerMode: "static",
+      filename: "css/[name].[contenthash:8].css",
+      chunkFilename: "css/chunk.[contenthash:8].css",
     }),
     new ProgressBarPlugin(),
+    new StylelintPlugin({
+      configFile: ".stylelintrc",
+      files: "**/*.(c|le)ss",
+      fix: true,
+    }),
   ],
-  node: {
-    module: "empty",
-    dgram: "empty",
-    dns: "mock",
-    fs: "empty",
-    http2: "empty",
-    net: "empty",
-    tls: "empty",
-    child_process: "empty",
-  },
   target: "web",
+  optimization: {
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        parallel: true,
+        terserOptions: {
+          compress: {
+            drop_console: true,
+            drop_debugger: true,
+          },
+        },
+      }),
+      new CssMinimizerPlugin(),
+    ],
+    splitChunks: {
+      chunks: "all",
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "vendors",
+          chunks: "all",
+          priority: 10,
+        },
+        common: {
+          minChunks: 2,
+          name: "common",
+          chunks: "all",
+          priority: 5,
+        },
+      },
+    },
+    runtimeChunk: {
+      name: "runtime",
+    },
+    moduleIds: "deterministic",
+    emitOnErrors: false,
+  },
+  performance: {
+    hints: "warning",
+    maxEntrypointSize: 512000,
+    maxAssetSize: 512000,
+  },
 };
 
 module.exports = clientConfig;

@@ -1,9 +1,8 @@
 const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const HtmlWebpackIncludeAssetsPlugin = require("html-webpack-include-assets-plugin");
+const AddAssetHtmlPlugin = require("add-asset-html-webpack-plugin");
 const ProgressBarPlugin = require("progress-bar-webpack-plugin");
-const getCSSModuleLocalIdent = require("react-dev-utils/getCSSModuleLocalIdent");
 const StylelintPlugin = require("stylelint-webpack-plugin");
 
 const PORT = 4000;
@@ -14,13 +13,29 @@ const clientConfig = {
     open: true,
     port: PORT,
     historyApiFallback: true,
+    hot: true,
+    proxy: [
+      {
+        context: ["/api"],
+        target: "https://apics.fifedu.com/",
+        changeOrigin: true,
+        pathRewrite: { "^/api": "" },
+      },
+      {
+        context: ["/frontend-static/"],
+        target: "https://assets.fifedu.com/",
+        changeOrigin: true,
+        pathRewrite: { "^/frontend-static/": "" },
+      },
+    ],
   },
   devtool: "eval-source-map",
   entry: ["@babel/polyfill", path.resolve(__dirname, "src/index")],
   output: {
-    chunkFilename: "chunk.[chunkhash:5].js",
+    chunkFilename: "chunk.[contenthash:5].js",
     filename: "[name].js",
     publicPath: "/",
+    clean: false,
   },
   module: {
     rules: [
@@ -46,97 +61,64 @@ const clientConfig = {
       },
       {
         test: /\.(png|jpg|gif)$/,
-        use: [
-          {
-            loader: "file-loader",
-            options: { limit: 8192 },
+        type: "asset/resource",
+        generator: {
+          filename: "images/[name].[hash:8][ext]",
+        },
+        parser: {
+          dataUrlCondition: {
+            maxSize: 8192,
           },
-        ],
+        },
       },
       {
         test: /\.(eot|svg|ttf|woff|woff2)(\?\S*)?$/,
-        use: [{ loader: "file-loader" }],
+        type: "asset/resource",
+        generator: {
+          filename: "fonts/[name].[hash:8][ext]",
+        },
       },
       {
         test: /\.css$/,
-        exclude: [path.resolve(__dirname, "node_modules"), path.resolve(__dirname, "src/assets")],
-        use: [
-          { loader: "style-loader" },
-          {
-            loader: "css-loader",
-            options: {
-              importLoaders: 1,
-              modules: {
-                getLocalIdent: getCSSModuleLocalIdent,
-              },
-            },
-          },
-          {
-            loader: require.resolve("postcss-loader"),
-            options: {
-              postcssOptions: {
-                plugins: [
-                  [
-                    "postcss-preset-env",
-                    {
-                      // Options
-                    },
-                  ],
-                ],
-              },
-            },
-          },
-        ],
-      },
-      {
-        test: /\.css$/,
-        include: [path.resolve(__dirname, "node_modules"), path.resolve(__dirname, "src/assets")],
-        use: [{ loader: "style-loader" }, { loader: "css-loader" }],
+        use: ["style-loader", "css-loader"],
       },
       {
         test: /\.less$/,
-        exclude: [path.resolve(__dirname, "node_modules"), path.resolve(__dirname, "src/assets")],
+        exclude: /\.module\.less$/,
         use: [
-          { loader: "style-loader" },
-          {
-            loader: "css-loader",
-            options: {
-              importLoaders: 2,
-              modules: {
-                getLocalIdent: getCSSModuleLocalIdent,
-              },
-            },
-          },
-          {
-            loader: require.resolve("postcss-loader"),
-            options: {
-              postcssOptions: {
-                plugins: [
-                  [
-                    "postcss-preset-env",
-                    {
-                      // Options
-                    },
-                  ],
-                ],
-              },
-            },
-          },
+          "style-loader",
+          "css-loader",
           {
             loader: "less-loader",
-            options: { javascriptEnabled: true },
+            options: {
+              lessOptions: {
+                javascriptEnabled: true,
+              },
+            },
           },
         ],
       },
       {
-        test: /\.less/,
-        include: [path.resolve(__dirname, "node_modules"), path.resolve(__dirname, "src/assets")],
+        test: /\.module\.less$/,
         use: [
-          { loader: "style-loader" },
-          { loader: "css-loader" },
+          "style-loader",
+          {
+            loader: "css-loader",
+            options: {
+              modules: {
+                mode: "local",
+                namedExport: false,
+                exportLocalsConvention: "camelCase",
+                localIdentName: "[path][name]__[local]--[hash:base64:5]",
+              },
+              esModule: true,
+            },
+          },
           {
             loader: "less-loader",
-            options: { javascriptEnabled: true },
+            options: {
+              lessOptions: { javascriptEnabled: true },
+            },
           },
         ],
       },
@@ -144,34 +126,49 @@ const clientConfig = {
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".json", ".jsx"],
+    fallback: {
+      dgram: false,
+      dns: false,
+      fs: false,
+      http2: false,
+      net: false,
+      tls: false,
+      child_process: false,
+    },
   },
   plugins: [
     new webpack.DefinePlugin({
       "process.env.NODE_ENV": JSON.stringify("development"),
     }),
+    new webpack.DllReferencePlugin({
+      context: __dirname,
+      manifest: require("./dll/vendor-manifest.json"),
+      name: "vendor_dll",
+    }),
+    new AddAssetHtmlPlugin({
+      filepath: path.resolve(__dirname, "dll/vendor.dll.js"),
+      publicPath: "/",
+      outputPath: "",
+      typeOfAsset: "js",
+      attributes: { defer: false },
+    }),
     new HtmlWebpackPlugin({
       template: "public/index.html",
+      filename: "index.html",
+      inject: true,
     }),
-    new webpack.DllReferencePlugin({
-      context: path.join(__dirname, ".", "dll"),
-      manifest: require("./dll/vendor-manifest.json"),
-    }),
-    new HtmlWebpackIncludeAssetsPlugin({ assets: ["../dll/vendor.dll.js"], append: false }),
-    new StylelintPlugin({ configFile: ".stylelintrc", files: "**/*.(c|le)ss", fix: true }),
-    new webpack.HotModuleReplacementPlugin(),
     new ProgressBarPlugin(),
+    new StylelintPlugin({
+      configFile: ".stylelintrc",
+      files: "**/*.(c|le)ss",
+      fix: true,
+    }),
   ],
-  node: {
-    module: "empty",
-    dgram: "empty",
-    dns: "mock",
-    fs: "empty",
-    http2: "empty",
-    net: "empty",
-    tls: "empty",
-    child_process: "empty",
-  },
   target: "web",
+  optimization: {
+    emitOnErrors: false,
+    moduleIds: "named",
+  },
 };
 
 module.exports = clientConfig;

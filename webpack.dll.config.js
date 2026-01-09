@@ -9,17 +9,17 @@ const dll = {
   },
   output: {
     path: path.resolve(__dirname, "dll"),
-    filename: "[name].dll.js",
-    library: "[name]_[chunkhash:5]",
+    filename: "vendor.dll.js",
+    library: "vendor_dll",
   },
   resolve: {
     extensions: [".js", ".json", ".jsx"],
   },
   plugins: [
     new webpack.DllPlugin({
-      context: path.join(__dirname, ".", "dll"),
-      path: path.join(__dirname, "dll", "[name]-manifest.json"),
-      name: "[name]_[chunkhash:5]",
+      context: __dirname,
+      path: path.join(__dirname, "dll", "vendor-manifest.json"),
+      name: "vendor_dll",
     }),
     new ProgressBarPlugin(),
   ],

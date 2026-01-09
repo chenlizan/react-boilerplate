@@ -3,6 +3,7 @@
  */
 
 import React, { Component } from "react";
+import { Getway } from "fif-getway";
 
 class App extends Component {
   render() {

@@ -6,7 +6,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Button, Checkbox, Form, Icon, Input, message } from "antd";
 import HelloTs from "../components/HelloTs";
-import styles from "../stylesheets/Login.css";
+import "../stylesheets/Login.css";
 
 const FormItem = Form.Item;
 
@@ -49,7 +49,7 @@ class LoginForm extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     return (
-      <Form onSubmit={this.handleSubmit} className={styles.login_form}>
+      <Form onSubmit={this.handleSubmit} className="login-form">
         <FormItem>
           {getFieldDecorator("userName", {
             rules: [{ required: true, message: "Please input your username!" }],
@@ -65,10 +65,10 @@ class LoginForm extends React.Component {
             valuePropName: "checked",
             initialValue: true,
           })(<Checkbox>Remember me</Checkbox>)}
-          <a className={styles.login_form_forgot} href="">
+          <a className="login-form-forgot" href="">
             Forgot password
           </a>
-          <Button type="primary" htmlType="submit" className={styles.login_form_button}>
+          <Button className="login-form-button" type="primary" htmlType="submit">
             Log in
           </Button>
           Or <a href="">register now!</a>
