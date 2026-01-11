@@ -2,6 +2,7 @@ const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const AddAssetHtmlPlugin = require("add-asset-html-webpack-plugin");
+const ESLintPlugin = require("eslint-webpack-plugin");
 const ProgressBarPlugin = require("progress-bar-webpack-plugin");
 const StylelintPlugin = require("stylelint-webpack-plugin");
 
@@ -14,20 +15,6 @@ const clientConfig = {
     port: PORT,
     historyApiFallback: true,
     hot: true,
-    proxy: [
-      {
-        context: ["/api"],
-        target: "https://apics.fifedu.com/",
-        changeOrigin: true,
-        pathRewrite: { "^/api": "" },
-      },
-      {
-        context: ["/frontend-static/"],
-        target: "https://assets.fifedu.com/",
-        changeOrigin: true,
-        pathRewrite: { "^/frontend-static/": "" },
-      },
-    ],
   },
   devtool: "eval-source-map",
   entry: ["@babel/polyfill", path.resolve(__dirname, "src/index")],
@@ -157,12 +144,19 @@ const clientConfig = {
       filename: "index.html",
       inject: true,
     }),
-    new ProgressBarPlugin(),
+    new ESLintPlugin({
+      extensions: ["js", "jsx", "ts", "tsx"],
+      fix: true,
+      failOnError: false,
+      context: path.resolve(__dirname, "src"),
+      lintDirtyModulesOnly: true,
+    }),
     new StylelintPlugin({
       configFile: ".stylelintrc",
       files: "**/*.(c|le)ss",
       fix: true,
     }),
+    new ProgressBarPlugin(),
   ],
   target: "web",
   optimization: {

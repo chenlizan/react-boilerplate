@@ -5,7 +5,6 @@ const AddAssetHtmlPlugin = require("add-asset-html-webpack-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ProgressBarPlugin = require("progress-bar-webpack-plugin");
-const StylelintPlugin = require("stylelint-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 
 const clientConfig = {
@@ -155,11 +154,6 @@ const clientConfig = {
       chunkFilename: "css/chunk.[contenthash:8].css",
     }),
     new ProgressBarPlugin(),
-    new StylelintPlugin({
-      configFile: ".stylelintrc",
-      files: "**/*.(c|le)ss",
-      fix: true,
-    }),
   ],
   target: "web",
   optimization: {
