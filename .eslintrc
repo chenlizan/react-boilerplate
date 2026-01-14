@@ -6,7 +6,6 @@
       "legacyDecorators": true
     }
   },
-  "plugins": ["@typescript-eslint"],
   "rules": {
     "max-len": ["warn", 120]
   }
