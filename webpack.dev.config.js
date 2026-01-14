@@ -149,6 +149,7 @@ const clientConfig = {
       fix: true,
       failOnError: false,
       context: path.resolve(__dirname, "src"),
+      eslintPath: "eslint/use-at-your-own-risk",
       lintDirtyModulesOnly: true,
     }),
     new StylelintPlugin({
