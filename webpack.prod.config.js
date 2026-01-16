@@ -120,18 +120,6 @@ const clientConfig = {
     new webpack.DefinePlugin({
       "process.env.NODE_ENV": JSON.stringify("production"),
     }),
-    new webpack.DllReferencePlugin({
-      context: __dirname,
-      manifest: require("./dll/vendor-manifest.json"),
-      name: "vendor_dll",
-    }),
-    new AddAssetHtmlPlugin({
-      filepath: path.resolve(__dirname, "dll/vendor.dll.js"),
-      publicPath: "./",
-      outputPath: "",
-      typeOfAsset: "js",
-      attributes: { defer: false },
-    }),
     new HtmlWebpackPlugin({
       template: "public/index.html",
       filename: "index.html",
