@@ -148,6 +148,7 @@ const clientConfig = {
       extensions: ["js", "jsx", "ts", "tsx"],
       fix: true,
       failOnError: false,
+      emitWarning: false,
       context: path.resolve(__dirname, "src"),
       eslintPath: "eslint/use-at-your-own-risk",
       lintDirtyModulesOnly: true,
